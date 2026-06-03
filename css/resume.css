@@ -1,0 +1,98 @@
+/**
+ * 简历页面 - 自定义样式
+ */
+
+/* ============================================
+   简历卡片样式
+   ============================================ */
+
+.resume-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.resume-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.resume-card {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.resume-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================================
+   时间线样式（用于经历）
+   ============================================ */
+
+.timeline-item {
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 2px solid #e5e7eb;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -0.375rem;
+  top: 0.25rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: #f59e0b;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px #f59e0b;
+}
+
+/* ============================================
+   技能标签
+   ============================================ */
+
+.skill-tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: #f3f4f6;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  background-color: #f59e0b;
+  color: white;
+}
+
+/* ============================================
+   打印样式
+   ============================================ */
+
+@media print {
+  #navbar,
+  #back-to-top,
+  #footer {
+    display: none;
+  }
+
+  .resume-section {
+    opacity: 1;
+    transform: none;
+  }
+
+  .resume-card {
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+    break-inside: avoid;
+  }
+}
