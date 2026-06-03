@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="影荐墙 - 经典高分电影推荐展示站，发现值得一看的好电影">
+  <title>影荐墙 - 经典高分电影推荐</title>
+
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+  <!-- 导航栏 -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-700/50 transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo / 品牌名称 -->
+        <a href="#" class="flex items-center space-x-2 group" aria-label="影荐墙 - 回到顶部">
+          <svg class="w-8 h-8 text-amber-400 group-hover:text-amber-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+          </svg>
+          <span class="text-xl font-bold text-white tracking-wide">影荐墙</span>
+        </a>
+
+        <!-- 桌面端导航链接 -->
+        <nav class="hidden md:flex items-center space-x-8" aria-label="主导航">
+          <a href="#movie-section" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">首页</a>
+          <a href="#footer" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">关于</a>
+        </nav>
+
+        <!-- 移动端汉堡菜单按钮 -->
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+          aria-label="打开菜单"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-900/95 border-t border-gray-700/50" role="menu">
+      <div class="px-4 py-3 space-y-2">
+        <a href="#movie-section" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">首页</a>
+        <a href="#footer" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">关于</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="pt-16">
+    <!-- Hero 区域 -->
+    <section class="relative bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-white py-16 md:py-24 overflow-hidden">
+      <!-- 装饰背景元素 -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
+          发现<span class="text-amber-400">经典</span>，遇见<span class="text-sky-400">好电影</span>
+        </h1>
+        <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
+          精选 8 部高分佳作，每一部都值得反复品味。在光影之间，感受故事的无穷魅力。
+        </p>
+
+        <!-- 分类筛选区 -->
+        <div class="max-w-4xl mx-auto" id="filter-section">
+          <!-- 搜索框 -->
+          <div class="relative mb-6">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="search-input"
+              class="w-full pl-12 pr-4 py-3.5 bg-white/10 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/50 backdrop-blur-sm transition-all"
+              placeholder="搜索电影名称或简介..."
+              autocomplete="off"
+              aria-label="搜索电影"
+            >
+          </div>
+
+          <!-- 分类标签按钮 -->
+          <div class="flex flex-wrap justify-center gap-2 md:gap-3" id="category-filters" role="group" aria-label="电影分类筛选">
+            <button
+              type="button"
+              data-category="all"
+              class="category-btn active px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-amber-500 text-gray-900 shadow-lg shadow-amber-500/25"
+            >
+              全部
+            </button>
+            <button
+              type="button"
+              data-category="科幻"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              科幻
+            </button>
+            <button
+              type="button"
+              data-category="悬疑"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              悬疑
+            </button>
+            <button
+              type="button"
+              data-category="动画"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              动画
+            </button>
+            <button
+              type="button"
+              data-category="剧情"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              剧情
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 电影卡片列表 -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16" id="movie-section">
+      <!-- 结果统计 -->
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-900">电影列表</h2>
+        <span id="result-count" class="text-sm text-gray-500">共 8 部</span>
+      </div>
+
+      <!-- 电影网格 -->
+      <div id="movie-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-5 lg:gap-6">
+        <!-- 卡片由 JS 动态渲染 -->
+      </div>
+
+      <!-- 空状态提示 -->
+      <div id="empty-state" class="hidden text-center py-20">
+        <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+        </svg>
+        <p class="text-gray-500 text-lg">暂无相关电影</p>
+        <p class="text-gray-400 text-sm mt-1">尝试更换关键词或分类</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- 回到顶部按钮 -->
+  <button
+    id="back-to-top"
+    class="fixed bottom-8 right-8 p-3 bg-gray-900 text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-gray-800 hover:shadow-xl z-40"
+    aria-label="回到顶部"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+    </svg>
+  </button>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-900 text-gray-400 py-10" id="footer">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-center md:text-left">
+          <p class="text-sm">&copy; 2026 影荐墙 All Rights Reserved.</p>
+          <p class="text-xs text-gray-500 mt-1">经典高分电影推荐展示站</p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="#" class="text-gray-500 hover:text-gray-300 transition-colors text-sm" aria-label="GitHub 仓库">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 主逻辑脚本 -->
+  <script src="js/app.js"></script>
+</body>
+</html>
