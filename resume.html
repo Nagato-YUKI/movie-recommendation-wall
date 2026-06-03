@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="陈政廷 - 个人简历">
+  <title>陈政廷 - 个人简历</title>
+
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/resume.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+  <!-- 导航栏 -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-700/50 transition-all duration-300" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo / 品牌名称 -->
+        <a href="index.html" class="flex items-center space-x-2 group" aria-label="影荐墙 - 回到首页">
+          <svg class="w-8 h-8 text-amber-400 group-hover:text-amber-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+          </svg>
+          <span class="text-xl font-bold text-white tracking-wide">影荐墙</span>
+        </a>
+
+        <!-- 桌面端导航链接 -->
+        <nav class="hidden md:flex items-center space-x-8" aria-label="主导航">
+          <a href="index.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">首页</a>
+          <a href="resume.html" class="text-amber-400 font-medium text-sm" aria-current="page">关于站长</a>
+        </nav>
+
+        <!-- 移动端汉堡菜单按钮 -->
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+          aria-label="打开菜单"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 移动端菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-gray-900/95 border-t border-gray-700/50" role="menu">
+      <div class="px-4 py-3 space-y-2">
+        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">首页</a>
+        <a href="resume.html" class="block px-3 py-2 rounded-md text-base font-medium text-amber-400 bg-gray-800/50">关于站长</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="pt-16">
+    <!-- 简历头部 -->
+    <section class="relative bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-white py-16 md:py-20 overflow-hidden">
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+          <!-- 头像占位 -->
+          <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-4xl md:text-5xl font-bold text-white shadow-xl flex-shrink-0">
+            陈
+          </div>
+
+          <!-- 基本信息 -->
+          <div class="text-center md:text-left flex-1">
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">陈政廷</h1>
+            <p class="text-amber-400 text-lg mb-4">硕士研究生 | 网络信息与信息安全</p>
+            <div class="flex flex-wrap justify-center md:justify-start gap-3 text-sm text-gray-300">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                1999-11-07
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                18279451525
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                1564629814@qq.com
+              </span>
+              <a href="https://github.com/Nagato-YUKI" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-amber-400 transition-colors">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 简历内容 -->
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- 左侧栏 -->
+        <div class="lg:col-span-1 space-y-8">
+          <!-- 教育经历 -->
+          <section class="resume-section">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+              </span>
+              教育经历
+            </h2>
+            <div class="space-y-4">
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900">广东技术师范大学</h3>
+                <p class="text-sm text-gray-600">网络信息与信息安全 · 硕士</p>
+                <p class="text-xs text-gray-400 mt-1">2021.9 - 2024.6</p>
+                <p class="text-sm text-gray-600 mt-2">平均分 87.3，二等奖学金 x1，三等奖学金 x2</p>
+              </div>
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900">江西理工大学</h3>
+                <p class="text-sm text-gray-600">软件工程 · 本科</p>
+                <p class="text-xs text-gray-400 mt-1">2017.9 - 2021.6</p>
+                <p class="text-sm text-gray-600 mt-2">平均分 90+，三等奖学金 x2</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 技能特长 -->
+          <section class="resume-section">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+              </span>
+              技能特长
+            </h2>
+            <div class="resume-card space-y-3">
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-1">AI 与大模型</h4>
+                <p class="text-sm text-gray-600">熟悉 Transformer 架构及大模型基本原理；具备调用 OpenAI / 文心一言 / 通义千问等 API 开发 AI 应用的经验；掌握提示词工程与 RAG 检索增强生成技术</p>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-1">编程与开发</h4>
+                <p class="text-sm text-gray-600">精通 Python（数据处理、Web 后端、AI 开发），熟悉 JavaScript / Vue3 前端开发；掌握 Flask 后端框架、RESTful API 设计；熟悉 MySQL 数据库设计与优化</p>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-1">深度学习</h4>
+                <p class="text-sm text-gray-600">掌握 PyTorch 框架，具备独立设计、训练、调优神经网络模型的能力；熟悉 CNN、RNN、Attention 机制；了解模型量化、ONNX 导出及推理加速</p>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900 mb-1">教学与工具</h4>
+                <p class="text-sm text-gray-600">具备高校教学经验，熟练运用 AI 工具辅助教学；熟练使用 Git 版本控制、Markdown 文档、Linux 开发环境；英语 CET-6，可阅读英文技术文档</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- 右侧栏 -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- 科研经历 -->
+          <section class="resume-section">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+              </span>
+              科研经历
+            </h2>
+            <div class="space-y-4">
+              <div class="resume-card">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h3 class="font-semibold text-gray-900">基于注意力机制组合特征的回收语音检测研究</h3>
+                  <span class="text-xs text-gray-400 flex-shrink-0">2022.5 - 2024.1</span>
+                </div>
+                <p class="text-sm text-gray-500 mb-2">第二作者（一作指导老师）</p>
+                <p class="text-sm text-gray-600">通过组合特征与注意力机制结合实现更好的检测效果。取得成果：发表国家发明专利一篇（已授权 ZL202311407004.7）</p>
+              </div>
+              <div class="resume-card">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                  <h3 class="font-semibold text-gray-900">基于双重跳跃连接特征的回收语音检测方法</h3>
+                  <span class="text-xs text-gray-400 flex-shrink-0">2023.9 - 至今</span>
+                </div>
+                <p class="text-sm text-gray-500 mb-2">第二作者（一作指导老师）</p>
+                <p class="text-sm text-gray-600">提出一种新的特征实现更好的检查效果。取得成果：在 IEEE Transactions on Information Forensics and Security 期刊上投递一篇论文</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 工作经历 -->
+          <section class="resume-section">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </span>
+              工作经历
+            </h2>
+            <div class="resume-card">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                <h3 class="font-semibold text-gray-900">福州软件职业技术学院</h3>
+                <span class="text-xs text-gray-400 flex-shrink-0">2024.8 - 至今</span>
+              </div>
+              <p class="text-sm text-gray-600">专任教师</p>
+              <div class="mt-3 space-y-2">
+                <div class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 flex-shrink-0"></span>
+                  <p class="text-sm text-gray-600">教授课程：《计算机网络基础》《Lua 语言程序设计》《MySQL 数据库技术》《深度学习及应用》，覆盖 200+ 名学生</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 flex-shrink-0"></span>
+                  <p class="text-sm text-gray-600">将 AI 工具融入教学实践：开发基于大模型的课程智能问答系统，辅助学生课后答疑；引入 AIGC 技术辅助教学素材制作</p>
+                </div>
+                <div class="flex items-start gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 flex-shrink-0"></span>
+                  <p class="text-sm text-gray-600">负责课程教学、实验指导、课程设计及试卷命题</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 项目经历 -->
+          <section class="resume-section">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              </span>
+              项目经历
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900 mb-1">AI 教学辅助平台</h3>
+                <p class="text-xs text-gray-400 mb-2">基于大模型 API</p>
+                <p class="text-sm text-gray-600">开发课程智能问答系统，集成知识库检索与对话功能，辅助学生课后答疑，提升教学效率。使用 Python + Flask 构建后端，Vue3 构建前端界面。</p>
+              </div>
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900 mb-1">智能排课系统</h3>
+                <p class="text-xs text-gray-400 mb-2">smart-scheduler</p>
+                <p class="text-sm text-gray-600">基于 Python/Flask 后端 + Vue3 前端的全栈排课解决方案，支持多约束条件自动排课、课表冲突检测与可视化调整。</p>
+                <a href="https://github.com/Nagato-YUKI/smart-scheduler" target="_blank" rel="noopener noreferrer" class="text-xs text-sky-600 hover:text-sky-700 mt-2 inline-flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                  GitHub
+                </a>
+              </div>
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900 mb-1">深度学习模型训练与部署</h3>
+                <p class="text-xs text-gray-400 mb-2">REST API 服务</p>
+                <p class="text-sm text-gray-600">独立完成神经网络模型训练 pipeline 部署为 REST API 服务的能力，熟悉 ONNX 格式转换。</p>
+              </div>
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900 mb-1">AIGC 图像生成工作流</h3>
+                <p class="text-xs text-gray-400 mb-2">Stable Diffusion / ComfyUI</p>
+                <p class="text-sm text-gray-600">本地部署 Stable Diffusion 与 ComfyUI 工作流，结合 LoRA 微调生成特定风格图像；探索 AI 辅助内容生成在教学素材制作中的应用。</p>
+              </div>
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900 mb-1">人脸识别与视频分析系统</h3>
+                <p class="text-xs text-gray-400 mb-2">OpenCV + 深度学习</p>
+                <p class="text-sm text-gray-600">基于 OpenCV + 深度学习模型实现视频中人脸检测与片段截取，可应用于课堂考勤、视频内容分析等场景。</p>
+              </div>
+              <div class="resume-card">
+                <h3 class="font-semibold text-gray-900 mb-1">Web 游戏开发系列</h3>
+                <p class="text-xs text-gray-400 mb-2">JavaScript / Vue3</p>
+                <p class="text-sm text-gray-600">使用原生 JavaScript / Vue3 开发多款交互式 Web 应用（plane-war-game / breakout-game / campus-guide），涵盖游戏逻辑、动画渲染、响应式布局等前端技术实践。</p>
+                <a href="https://github.com/Nagato-YUKI" target="_blank" rel="noopener noreferrer" class="text-xs text-sky-600 hover:text-sky-700 mt-2 inline-flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-900 text-gray-400 py-10" id="footer">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-center md:text-left">
+          <p class="text-sm">&copy; 2026 影荐墙 All Rights Reserved.</p>
+          <p class="text-xs text-gray-500 mt-1">经典高分电影推荐展示站</p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="https://github.com/Nagato-YUKI" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-gray-300 transition-colors text-sm" aria-label="GitHub 仓库">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 回到顶部按钮 -->
+  <button
+    id="back-to-top"
+    class="fixed bottom-8 right-8 p-3 bg-gray-900 text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-gray-800 hover:shadow-xl z-40"
+    aria-label="回到顶部"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+    </svg>
+  </button>
+
+  <script src="js/resume.js"></script>
+</body>
+</html>
