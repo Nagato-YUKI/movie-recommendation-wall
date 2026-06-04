@@ -1,6 +1,6 @@
 /**
  * 影荐墙 - 主逻辑脚本
- * 功能：数据管理、渲染、搜索、筛选、收藏、动效
+ * 功能：数据管理、渲染、搜索、筛选、收藏、点赞、评分、留言、Lightbox、懒加载、动效
  */
 
 // ============================================
@@ -9,6 +9,15 @@
 
 /** localStorage 收藏数据的键名 */
 const STORAGE_KEY_FAVORITES = 'movie_favorites';
+
+/** localStorage 留言数据的键名 */
+const STORAGE_KEY_MESSAGES = 'movie_messages';
+
+/** localStorage 点赞数据的键名 */
+const STORAGE_KEY_LIKES = 'movie_likes';
+
+/** localStorage 评分数据的键名 */
+const STORAGE_KEY_RATINGS = 'movie_ratings';
 
 /** 防抖延迟时间（毫秒） */
 const DEBOUNCE_DELAY = 200;
@@ -25,17 +34,22 @@ const TAG_CLASS_MAP = {
   '奇幻': 'tag-fantasy',
   '动作': 'tag-action',
   '家庭': 'tag-family',
+  '爱情': 'tag-love',
+  '喜剧': 'tag-comedy',
+  '战争': 'tag-war',
+  '传记': 'tag-biography',
+  '历史': 'tag-history',
 };
 
 /** 分类主标签列表（用于筛选） */
-const MAIN_CATEGORIES = ['科幻', '悬疑', '动画', '剧情'];
+const MAIN_CATEGORIES = ['科幻', '悬疑', '动画', '剧情', '爱情', '喜剧', '战争', '传记', '历史'];
 
 // ============================================
 // 电影数据（硬编码）
 // ============================================
 
 /**
- * 8 部电影的完整数据
+ * 13 部电影的完整数据
  * @type {Array<{
  *   id: string,
  *   title: string,
@@ -146,6 +160,66 @@ const MOVIES_DATA = [
     quote: '阿尔卑斯的风，吹散所有阴霾。',
     image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=900&fit=crop',
   },
+  {
+    id: 'movie_9',
+    title: '泰坦尼克号',
+    originalTitle: 'Titanic',
+    year: 1997,
+    director: '詹姆斯·卡梅隆',
+    categories: ['爱情', '剧情'],
+    rating: 9.5,
+    description: '穷画家杰克与贵族少女露丝在豪华邮轮上相遇，跨越阶级的爱情在冰山撞击的生死关头绽放出永恒光芒。卡梅隆用史诗般的叙事与震撼视效，谱写了一曲关于爱与牺牲的千古绝唱。',
+    quote: '你跳，我就跳。',
+    image: 'https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=600&h=900&fit=crop',
+  },
+  {
+    id: 'movie_10',
+    title: '大话西游之大圣娶亲',
+    originalTitle: 'A Chinese Odyssey Part Two',
+    year: 1995,
+    director: '刘镇伟',
+    categories: ['喜剧', '爱情', '奇幻'],
+    rating: 9.2,
+    description: '至尊宝为救白晶晶穿越回五百年前，却与紫霞仙子展开一段注定悲剧的宿命之恋。无厘头笑料包裹深情内核，结尾城墙上的一吻成为华语影史最经典的遗憾与成全。',
+    quote: '曾经有一份真诚的爱情放在我面前……',
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&h=900&fit=crop',
+  },
+  {
+    id: 'movie_11',
+    title: '辛德勒的名单',
+    originalTitle: "Schindler's List",
+    year: 1993,
+    director: '史蒂文·斯皮尔伯格',
+    categories: ['战争', '传记', '历史'],
+    rating: 9.6,
+    description: '二战期间，德国商人辛德勒在克拉科夫开设工厂，倾家荡产拯救了上千名犹太人的生命。斯皮尔伯格用黑白影像记录下人性在黑暗年代的光辉，红衣女孩的一抹色彩刺痛了整个世界。',
+    quote: '凡救一命，即救全世界。',
+    image: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&h=900&fit=crop',
+  },
+  {
+    id: 'movie_12',
+    title: '美丽人生',
+    originalTitle: 'La vita è bella',
+    year: 1997,
+    director: '罗伯托·贝尼尼',
+    categories: ['喜剧', '战争', '爱情'],
+    rating: 9.5,
+    description: '犹太青年圭多用乐观与幽默为儿子在纳粹集中营中编织了一场最温柔的谎言，将残酷的现实化作赢取坦克的游戏。父爱如山，在至暗时刻依然守护住孩子心中最纯净的阳光。',
+    quote: '早安！公主！',
+    image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&h=900&fit=crop',
+  },
+  {
+    id: 'movie_13',
+    title: '至暗时刻',
+    originalTitle: 'Darkest Hour',
+    year: 2017,
+    director: '乔·赖特',
+    categories: ['传记', '历史', '剧情'],
+    rating: 8.7,
+    description: '二战初期，温斯顿·丘吉尔在内外交困中临危受命，以钢铁般的意志带领英国走出投降阴影，坚定走向抵抗法西斯的道路。加里·奥德曼神级演技还原了这位传奇首相最艰难的历史抉择。',
+    quote: '没有最终的成功，也没有致命的失败，最可贵的是继续前进的勇气。',
+    image: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&h=900&fit=crop',
+  },
 ];
 
 // ============================================
@@ -161,11 +235,29 @@ let currentSearchQuery = '';
 /** 收藏状态集合（Set 存储 movie id） */
 let favoriteSet = new Set();
 
+/** 点赞状态集合（Set 存储 movie id） */
+let likeSet = new Set();
+
+/** 用户评分映射（movie id -> rating） */
+let ratingMap = {};
+
+/** 点赞计数映射（movie id -> count） */
+let likeCounts = {};
+
 /** 防抖定时器 ID */
 let debounceTimerId = null;
 
 /** IntersectionObserver 实例 */
 let scrollObserver = null;
+
+/** 留言数组 */
+let messages = [];
+
+/** Lightbox 当前显示的电影索引 */
+let lightboxCurrentIndex = -1;
+
+/** 图片懒加载 IntersectionObserver 实例 */
+let lazyImageObserver = null;
 
 // ============================================
 // DOM 元素引用
@@ -194,6 +286,39 @@ let mobileMenuBtnEl = null;
 
 /** 移动端菜单 */
 let mobileMenuEl = null;
+
+/** 留言板表单 */
+let messageFormEl = null;
+
+/** 留言昵称输入框 */
+let messageNicknameEl = null;
+
+/** 留言内容输入框 */
+let messageContentEl = null;
+
+/** 留言列表容器 */
+let messageListEl = null;
+
+/** 滚动进度条 */
+let scrollProgressEl = null;
+
+/** Lightbox 覆盖层 */
+let lightboxOverlayEl = null;
+
+/** Lightbox 图片元素 */
+let lightboxImageEl = null;
+
+/** Lightbox 标题元素 */
+let lightboxCaptionEl = null;
+
+/** Lightbox 关闭按钮 */
+let lightboxCloseEl = null;
+
+/** Lightbox 上一张按钮 */
+let lightboxPrevEl = null;
+
+/** Lightbox 下一张按钮 */
+let lightboxNextEl = null;
 
 // ============================================
 // 工具函数
@@ -230,6 +355,106 @@ function saveFavoritesToStorage(favorites) {
     localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(array));
   } catch (error) {
     console.warn('保存收藏数据失败:', error);
+  }
+}
+
+/**
+ * 从 localStorage 读取留言数据
+ * @returns {Array<Object>} 留言数组
+ */
+function loadMessagesFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_MESSAGES);
+    if (!raw) {
+      return [];
+    }
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+    return [];
+  } catch (error) {
+    console.warn('读取留言数据失败:', error);
+    return [];
+  }
+}
+
+/**
+ * 将留言数据写入 localStorage
+ * @param {Array<Object>} msgs - 留言数组
+ */
+function saveMessagesToStorage(msgs) {
+  try {
+    localStorage.setItem(STORAGE_KEY_MESSAGES, JSON.stringify(msgs));
+  } catch (error) {
+    console.warn('保存留言数据失败:', error);
+  }
+}
+
+/**
+ * 从 localStorage 读取点赞数据
+ * @returns {Set<string>} 点赞的电影 ID 集合
+ */
+function loadLikesFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_LIKES);
+    if (!raw) {
+      return new Set();
+    }
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return new Set(parsed);
+    }
+    return new Set();
+  } catch (error) {
+    console.warn('读取点赞数据失败:', error);
+    return new Set();
+  }
+}
+
+/**
+ * 将点赞数据写入 localStorage
+ * @param {Set<string>} likes - 点赞的电影 ID 集合
+ */
+function saveLikesToStorage(likes) {
+  try {
+    const array = Array.from(likes);
+    localStorage.setItem(STORAGE_KEY_LIKES, JSON.stringify(array));
+  } catch (error) {
+    console.warn('保存点赞数据失败:', error);
+  }
+}
+
+/**
+ * 从 localStorage 读取评分数据
+ * @returns {Object} 评分映射对象
+ */
+function loadRatingsFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_RATINGS);
+    if (!raw) {
+      return {};
+    }
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      return parsed;
+    }
+    return {};
+  } catch (error) {
+    console.warn('读取评分数据失败:', error);
+    return {};
+  }
+}
+
+/**
+ * 将评分数据写入 localStorage
+ * @param {Object} ratings - 评分映射对象
+ */
+function saveRatingsToStorage(ratings) {
+  try {
+    localStorage.setItem(STORAGE_KEY_RATINGS, JSON.stringify(ratings));
+  } catch (error) {
+    console.warn('保存评分数据失败:', error);
   }
 }
 
@@ -311,8 +536,21 @@ function renderMovieCard(movie) {
   const isFavorite = favoriteSet.has(movie.id);
   const favoriteClass = isFavorite ? 'text-red-500 is-favorite' : 'text-gray-400';
   const favoriteFill = isFavorite ? 'currentColor' : 'none';
-  const favoriteStroke = isFavorite ? 'currentColor' : 'currentColor';
   const favoriteLabel = isFavorite ? `取消收藏《${movie.title}》` : `收藏《${movie.title}》`;
+
+  const isLiked = likeSet.has(movie.id);
+  const likeClass = isLiked ? 'text-amber-500 is-liked' : 'text-gray-400';
+  const likeCount = likeCounts[movie.id] || 0;
+
+  const userRating = ratingMap[movie.id] || 0;
+  const starsHtml = [1, 2, 3, 4, 5].map((star) => {
+    const filled = star <= userRating;
+    return `<button type="button" class="star-btn ${filled ? 'is-filled' : 'is-empty'}" data-movie-id="${movie.id}" data-star="${star}" aria-label="${star}星">
+      <svg class="w-4 h-4" fill="${filled ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+      </svg>
+    </button>`;
+  }).join('');
 
   // 生成分类标签 HTML
   const tagsHtml = movie.categories
@@ -328,9 +566,9 @@ function renderMovieCard(movie) {
         <!-- 电影配图 -->
         <div class="movie-image-wrapper is-loading">
           <img
-            src="${movie.image}"
+            class="lazy-image"
+            data-src="${movie.image}"
             alt="${movie.title} 电影海报"
-            loading="lazy"
             onload="this.parentElement.classList.remove('is-loading')"
             onerror="this.parentElement.classList.remove('is-loading'); this.src='https://placehold.co/600x900/e5e7eb/9ca3af?text=${encodeURIComponent(movie.title)}'"
           >
@@ -345,6 +583,30 @@ function renderMovieCard(movie) {
             <svg class="w-5 h-5" fill="${favoriteFill}" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
             </svg>
+          </button>
+          <!-- 分享按钮 -->
+          <button
+            type="button"
+            class="share-btn absolute top-3 right-12 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md text-gray-400 hover:text-amber-500"
+            aria-label="分享《${movie.title}》"
+            data-movie-id="${movie.id}"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+            </svg>
+          </button>
+          <!-- 点赞按钮 -->
+          <button
+            type="button"
+            class="like-btn absolute top-3 left-3 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md ${likeClass}"
+            aria-label="点赞《${movie.title}》"
+            aria-pressed="${isLiked}"
+            data-movie-id="${movie.id}"
+          >
+            <svg class="w-5 h-5" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+            </svg>
+            <span class="like-count text-xs font-bold ml-0.5">${likeCount}</span>
           </button>
           <!-- 评分徽章 -->
           <div class="absolute bottom-3 left-3">
@@ -373,7 +635,13 @@ function renderMovieCard(movie) {
               ${tagsHtml}
             </div>
           </div>
-          <p class="mt-3 text-xs text-amber-600 font-medium italic border-t border-gray-100 pt-2">
+          <!-- 用户评分 -->
+          <div class="star-rating flex items-center gap-1 mt-2 pt-2 border-t border-gray-100">
+            <span class="text-xs text-gray-400 mr-1">我的评分:</span>
+            ${starsHtml}
+            ${userRating > 0 ? `<span class="text-xs text-amber-600 font-medium">${userRating}分</span>` : ''}
+          </div>
+          <p class="mt-2 text-xs text-amber-600 font-medium italic border-t border-gray-100 pt-2">
             "${movie.quote}"
           </p>
         </div>
@@ -406,8 +674,20 @@ function renderMovieList(movies) {
   // 重新绑定收藏按钮事件
   bindFavoriteButtons();
 
+  // 重新绑定分享按钮事件
+  bindShareButtons();
+
+  // 重新绑定点赞按钮事件
+  bindLikeButtons();
+
+  // 重新绑定评分按钮事件
+  bindRatingButtons();
+
   // 重新观察新渲染的卡片
   observeMovieCards();
+
+  // 重新观察懒加载图片
+  observeLazyImages();
 }
 
 /**
@@ -431,6 +711,54 @@ function updateCategoryButtons() {
       btn.classList.add('bg-white/10', 'text-gray-300', 'hover:bg-white/20', 'border', 'border-gray-600/50');
     }
   });
+}
+
+/**
+ * 渲染留言列表
+ */
+function renderMessageList() {
+  if (!messageListEl) {
+    return;
+  }
+
+  if (messages.length === 0) {
+    messageListEl.innerHTML = `
+      <div class="text-center py-8 text-gray-400">
+        <svg class="w-12 h-12 mx-auto mb-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+        </svg>
+        <p>暂无留言，快来发表第一条留言吧！</p>
+      </div>
+    `;
+    return;
+  }
+
+  const html = messages.slice().reverse().map((msg) => {
+    const date = new Date(msg.timestamp);
+    const timeStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    return `
+      <div class="message-item">
+        <div class="message-header">
+          <span class="message-nickname">${escapeHtml(msg.nickname)}</span>
+          <span class="message-time">${timeStr}</span>
+        </div>
+        <p class="message-content">${escapeHtml(msg.content)}</p>
+      </div>
+    `;
+  }).join('');
+
+  messageListEl.innerHTML = html;
+}
+
+/**
+ * HTML 转义，防止 XSS
+ * @param {string} text - 原始文本
+ * @returns {string} 转义后的文本
+ */
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // ============================================
@@ -517,6 +845,122 @@ function handleFavoriteClick(event) {
 }
 
 /**
+ * 处理点赞按钮点击
+ * @param {Event} event - click 事件对象
+ */
+function handleLikeClick(event) {
+  const button = event.target.closest('.like-btn');
+  if (!button) {
+    return;
+  }
+
+  const movieId = button.dataset.movieId;
+  if (!movieId) {
+    return;
+  }
+
+  const isLiked = likeSet.has(movieId);
+  const countEl = button.querySelector('.like-count');
+
+  if (isLiked) {
+    likeSet.delete(movieId);
+    button.classList.remove('text-amber-500', 'is-liked');
+    button.classList.add('text-gray-400');
+    button.setAttribute('aria-pressed', 'false');
+    likeCounts[movieId] = Math.max(0, (likeCounts[movieId] || 0) - 1);
+  } else {
+    likeSet.add(movieId);
+    button.classList.remove('text-gray-400');
+    button.classList.add('text-amber-500', 'is-liked');
+    button.setAttribute('aria-pressed', 'true');
+    likeCounts[movieId] = (likeCounts[movieId] || 0) + 1;
+  }
+
+  if (countEl) {
+    countEl.textContent = likeCounts[movieId] || 0;
+  }
+
+  saveLikesToStorage(likeSet);
+}
+
+/**
+ * 处理评分按钮点击
+ * @param {Event} event - click 事件对象
+ */
+function handleRatingClick(event) {
+  const button = event.target.closest('.star-btn');
+  if (!button) {
+    return;
+  }
+
+  const movieId = button.dataset.movieId;
+  const star = parseInt(button.dataset.star, 10);
+  if (!movieId || !star) {
+    return;
+  }
+
+  // 如果点击的是当前评分，则取消评分
+  if (ratingMap[movieId] === star) {
+    delete ratingMap[movieId];
+  } else {
+    ratingMap[movieId] = star;
+  }
+
+  saveRatingsToStorage(ratingMap);
+
+  // 重新渲染该卡片的评分区域
+  const card = document.querySelector(`.movie-card[data-movie-id="${movieId}"]`);
+  if (card) {
+    const movie = MOVIES_DATA.find((m) => m.id === movieId);
+    if (movie) {
+      // 为了简单，直接重新渲染整个列表
+      const filtered = filterMovies();
+      renderMovieList(filtered);
+    }
+  }
+}
+
+/**
+ * 处理留言提交
+ * @param {Event} event - submit 事件对象
+ */
+function handleMessageSubmit(event) {
+  event.preventDefault();
+
+  if (!messageNicknameEl || !messageContentEl) {
+    return;
+  }
+
+  const nickname = messageNicknameEl.value.trim();
+  const content = messageContentEl.value.trim();
+
+  if (!nickname) {
+    showToast('请输入昵称');
+    return;
+  }
+
+  if (!content) {
+    showToast('请输入留言内容');
+    return;
+  }
+
+  const message = {
+    id: Date.now().toString(),
+    nickname,
+    content,
+    timestamp: Date.now(),
+  };
+
+  messages.push(message);
+  saveMessagesToStorage(messages);
+  renderMessageList();
+
+  messageNicknameEl.value = '';
+  messageContentEl.value = '';
+  showToast('留言提交成功！');
+}
+
+/**
  * 处理回到顶部按钮点击
  */
 function handleBackToTop() {
@@ -524,7 +968,7 @@ function handleBackToTop() {
 }
 
 /**
- * 处理滚动事件（显示/隐藏回到顶部按钮）
+ * 处理滚动事件（显示/隐藏回到顶部按钮、更新进度条）
  */
 function handleScroll() {
   if (!backToTopEl) {
@@ -537,6 +981,65 @@ function handleScroll() {
   } else {
     backToTopEl.classList.remove('is-visible');
   }
+
+  handleScrollProgress();
+}
+
+/**
+ * 处理滚动进度条
+ */
+function handleScrollProgress() {
+  if (!scrollProgressEl) {
+    return;
+  }
+
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  scrollProgressEl.style.width = `${progress}%`;
+}
+
+/**
+ * 处理分享按钮点击
+ * @param {Event} event - click 事件对象
+ */
+function handleShareClick(event) {
+  const button = event.target.closest('.share-btn');
+  if (!button) {
+    return;
+  }
+
+  const url = window.location.href;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('链接已复制到剪贴板');
+    }).catch(() => {
+      showToast('复制失败，请手动复制');
+    });
+  } else {
+    showToast('复制失败，请手动复制');
+  }
+}
+
+/**
+ * 显示 Toast 通知
+ * @param {string} message - 提示消息
+ */
+function showToast(message) {
+  let toast = document.getElementById('toast-notification');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast-notification';
+    toast.className = 'toast-notification';
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add('is-visible');
+
+  setTimeout(() => {
+    toast.classList.remove('is-visible');
+  }, 2000);
 }
 
 /**
@@ -555,6 +1058,169 @@ function handleMobileMenuToggle() {
     mobileMenuEl.classList.remove('hidden');
     mobileMenuBtnEl.setAttribute('aria-expanded', 'true');
   }
+}
+
+// ============================================
+// Lightbox 相关
+// ============================================
+
+/**
+ * 打开 Lightbox 显示指定电影
+ * @param {string} movieId - 电影 ID
+ */
+function openLightbox(movieId) {
+  const index = MOVIES_DATA.findIndex((m) => m.id === movieId);
+  if (index === -1) {
+    return;
+  }
+
+  lightboxCurrentIndex = index;
+  showLightboxAtIndex(index);
+}
+
+/**
+ * 关闭 Lightbox
+ */
+function closeLightbox() {
+  if (!lightboxOverlayEl) {
+    return;
+  }
+
+  lightboxOverlayEl.classList.add('hidden');
+  lightboxOverlayEl.classList.remove('active');
+  lightboxCurrentIndex = -1;
+}
+
+/**
+ * 在 Lightbox 中显示指定索引的电影
+ * @param {number} index - 电影索引
+ */
+function showLightboxAtIndex(index) {
+  if (!lightboxOverlayEl || !lightboxImageEl || !lightboxCaptionEl) {
+    return;
+  }
+
+  const movie = MOVIES_DATA[index];
+  if (!movie) {
+    return;
+  }
+
+  // 使用更高分辨率的图片（将 w=600 替换为 w=1200）
+  const highResImage = movie.image.replace('w=600', 'w=1200');
+  lightboxImageEl.src = highResImage;
+  lightboxImageEl.alt = `${movie.title} 电影海报`;
+  lightboxCaptionEl.textContent = movie.title;
+
+  lightboxOverlayEl.classList.remove('hidden');
+  // 使用 requestAnimationFrame 确保 hidden 移除后再添加 active，触发过渡动画
+  requestAnimationFrame(() => {
+    lightboxOverlayEl.classList.add('active');
+  });
+}
+
+/**
+ * 处理 Lightbox 上一张
+ */
+function handleLightboxPrev() {
+  if (lightboxCurrentIndex === -1) {
+    return;
+  }
+
+  let newIndex = lightboxCurrentIndex - 1;
+  if (newIndex < 0) {
+    newIndex = MOVIES_DATA.length - 1;
+  }
+  lightboxCurrentIndex = newIndex;
+  showLightboxAtIndex(newIndex);
+}
+
+/**
+ * 处理 Lightbox 下一张
+ */
+function handleLightboxNext() {
+  if (lightboxCurrentIndex === -1) {
+    return;
+  }
+
+  let newIndex = lightboxCurrentIndex + 1;
+  if (newIndex >= MOVIES_DATA.length) {
+    newIndex = 0;
+  }
+  lightboxCurrentIndex = newIndex;
+  showLightboxAtIndex(newIndex);
+}
+
+/**
+ * 处理 Lightbox 键盘事件
+ * @param {KeyboardEvent} event - 键盘事件
+ */
+function handleLightboxKeydown(event) {
+  if (!lightboxOverlayEl || lightboxOverlayEl.classList.contains('hidden')) {
+    return;
+  }
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeLightbox();
+  } else if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    handleLightboxPrev();
+  } else if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    handleLightboxNext();
+  }
+}
+
+/**
+ * 处理 Lightbox 覆盖层点击（点击背景关闭）
+ * @param {MouseEvent} event - 鼠标事件
+ */
+function handleLightboxOverlayClick(event) {
+  if (event.target === lightboxOverlayEl) {
+    closeLightbox();
+  }
+}
+
+/**
+ * 绑定 Lightbox 相关事件
+ */
+function bindLightboxEvents() {
+  // 电影图片点击打开 Lightbox（事件委托）
+  if (movieGridEl) {
+    movieGridEl.addEventListener('click', (event) => {
+      const img = event.target.closest('.movie-image-wrapper img');
+      if (img) {
+        const card = img.closest('.movie-card');
+        if (card) {
+          const movieId = card.dataset.movieId;
+          if (movieId) {
+            openLightbox(movieId);
+          }
+        }
+      }
+    });
+  }
+
+  // 关闭按钮
+  if (lightboxCloseEl) {
+    lightboxCloseEl.addEventListener('click', closeLightbox);
+  }
+
+  // 左右导航
+  if (lightboxPrevEl) {
+    lightboxPrevEl.addEventListener('click', handleLightboxPrev);
+  }
+  if (lightboxNextEl) {
+    lightboxNextEl.addEventListener('click', handleLightboxNext);
+  }
+
+  // 点击背景关闭
+  if (lightboxOverlayEl) {
+    lightboxOverlayEl.addEventListener('click', handleLightboxOverlayClick);
+  }
+
+  // 键盘事件
+  document.addEventListener('keydown', handleLightboxKeydown);
 }
 
 // ============================================
@@ -591,6 +1257,55 @@ function initScrollObserver() {
 }
 
 /**
+ * 初始化图片懒加载 IntersectionObserver
+ */
+function initLazyImageObserver() {
+  if (!window.IntersectionObserver) {
+    // 浏览器不支持时直接加载所有图片
+    const images = document.querySelectorAll('.lazy-image');
+    images.forEach((img) => {
+      if (img.dataset.src) {
+        img.src = img.dataset.src;
+      }
+    });
+    return;
+  }
+
+  lazyImageObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+          }
+          lazyImageObserver.unobserve(img);
+        }
+      });
+    },
+    {
+      root: null,
+      rootMargin: '50px 0px',
+      threshold: 0,
+    }
+  );
+}
+
+/**
+ * 观察所有懒加载图片元素
+ */
+function observeLazyImages() {
+  if (!lazyImageObserver) {
+    return;
+  }
+
+  const images = document.querySelectorAll('.lazy-image');
+  images.forEach((img) => {
+    lazyImageObserver.observe(img);
+  });
+}
+
+/**
  * 观察所有电影卡片元素
  */
 function observeMovieCards() {
@@ -615,6 +1330,36 @@ function bindFavoriteButtons() {
   const buttons = document.querySelectorAll('.favorite-btn');
   buttons.forEach((btn) => {
     btn.addEventListener('click', handleFavoriteClick);
+  });
+}
+
+/**
+ * 绑定分享按钮点击事件
+ */
+function bindShareButtons() {
+  const buttons = document.querySelectorAll('.share-btn');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', handleShareClick);
+  });
+}
+
+/**
+ * 绑定点赞按钮点击事件
+ */
+function bindLikeButtons() {
+  const buttons = document.querySelectorAll('.like-btn');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', handleLikeClick);
+  });
+}
+
+/**
+ * 绑定评分按钮点击事件
+ */
+function bindRatingButtons() {
+  const buttons = document.querySelectorAll('.star-btn');
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', handleRatingClick);
   });
 }
 
@@ -644,6 +1389,11 @@ function bindEvents() {
   if (mobileMenuBtnEl) {
     mobileMenuBtnEl.addEventListener('click', handleMobileMenuToggle);
   }
+
+  // 留言板提交
+  if (messageFormEl) {
+    messageFormEl.addEventListener('submit', handleMessageSubmit);
+  }
 }
 
 // ============================================
@@ -662,6 +1412,19 @@ function cacheElements() {
   backToTopEl = document.getElementById('back-to-top');
   mobileMenuBtnEl = document.getElementById('mobile-menu-btn');
   mobileMenuEl = document.getElementById('mobile-menu');
+  messageFormEl = document.getElementById('message-form');
+  messageNicknameEl = document.getElementById('message-nickname');
+  messageContentEl = document.getElementById('message-content');
+  messageListEl = document.getElementById('message-list');
+  scrollProgressEl = document.getElementById('scroll-progress');
+
+  // Lightbox 元素
+  lightboxOverlayEl = document.getElementById('lightbox-overlay');
+  lightboxImageEl = document.getElementById('lightbox-image');
+  lightboxCaptionEl = document.getElementById('lightbox-caption');
+  lightboxCloseEl = document.getElementById('lightbox-close');
+  lightboxPrevEl = document.getElementById('lightbox-prev');
+  lightboxNextEl = document.getElementById('lightbox-next');
 }
 
 /**
@@ -674,14 +1437,32 @@ function init() {
   // 从 localStorage 加载收藏数据
   favoriteSet = loadFavoritesFromStorage();
 
+  // 从 localStorage 加载点赞数据
+  likeSet = loadLikesFromStorage();
+
+  // 从 localStorage 加载评分数据
+  ratingMap = loadRatingsFromStorage();
+
+  // 从 localStorage 加载留言数据
+  messages = loadMessagesFromStorage();
+
   // 初始化滚动观察器
   initScrollObserver();
+
+  // 初始化图片懒加载观察器
+  initLazyImageObserver();
 
   // 绑定事件
   bindEvents();
 
+  // 绑定 Lightbox 事件
+  bindLightboxEvents();
+
   // 初始渲染全部电影
   renderMovieList(MOVIES_DATA);
+
+  // 初始渲染留言列表
+  renderMessageList();
 
   // 初始化回到顶部按钮状态
   handleScroll();

@@ -19,6 +19,9 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased">
 
+  <!-- 滚动进度条 -->
+  <div id="scroll-progress"></div>
+
   <!-- 导航栏 -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-700/50 transition-all duration-300" id="navbar">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,6 +37,7 @@
         <!-- 桌面端导航链接 -->
         <nav class="hidden md:flex items-center space-x-8" aria-label="主导航">
           <a href="#movie-section" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">首页</a>
+          <a href="#message-board" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">留言板</a>
           <a href="#footer" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">关于</a>
         </nav>
 
@@ -56,6 +60,7 @@
     <div id="mobile-menu" class="hidden md:hidden bg-gray-900/95 border-t border-gray-700/50" role="menu">
       <div class="px-4 py-3 space-y-2">
         <a href="#movie-section" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">首页</a>
+        <a href="#message-board" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">留言板</a>
         <a href="#footer" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">关于</a>
       </div>
     </div>
@@ -76,7 +81,7 @@
           发现<span class="text-amber-400">经典</span>，遇见<span class="text-sky-400">好电影</span>
         </h1>
         <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
-          精选 8 部高分佳作，每一部都值得反复品味。在光影之间，感受故事的无穷魅力。
+          精选 13 部高分佳作，每一部都值得反复品味。在光影之间，感受故事的无穷魅力。
         </p>
 
         <!-- 分类筛选区 -->
@@ -135,21 +140,56 @@
             >
               剧情
             </button>
+            <button
+              type="button"
+              data-category="爱情"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              爱情
+            </button>
+            <button
+              type="button"
+              data-category="喜剧"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              喜剧
+            </button>
+            <button
+              type="button"
+              data-category="战争"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              战争
+            </button>
+            <button
+              type="button"
+              data-category="传记"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              传记
+            </button>
+            <button
+              type="button"
+              data-category="历史"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              历史
+            </button>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 电影卡片列表 -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16" id="movie-section">
+    <section class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 md:py-12 lg:py-16" id="movie-section">
       <!-- 结果统计 -->
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl md:text-2xl font-bold text-gray-900">电影列表</h2>
-        <span id="result-count" class="text-sm text-gray-500">共 8 部</span>
+        <span id="result-count" class="text-sm text-gray-500">共 13 部</span>
       </div>
 
       <!-- 电影网格 -->
-      <div id="movie-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-5 lg:gap-6">
+      <div id="movie-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
         <!-- 卡片由 JS 动态渲染 -->
       </div>
 
@@ -160,6 +200,51 @@
         </svg>
         <p class="text-gray-500 text-lg">暂无相关电影</p>
         <p class="text-gray-400 text-sm mt-1">尝试更换关键词或分类</p>
+      </div>
+    </section>
+
+    <!-- 留言板 -->
+    <section class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-8 md:py-12 lg:py-16" id="message-board">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+          </svg>
+          留言板
+        </h2>
+
+        <form class="message-form mb-8" id="message-form">
+          <div class="mb-4">
+            <input
+              type="text"
+              id="message-nickname"
+              class="message-input w-full px-4 py-3 bg-white/10 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/50 backdrop-blur-sm transition-all"
+              placeholder="你的昵称"
+              autocomplete="off"
+              aria-label="昵称"
+            >
+          </div>
+          <div class="mb-4">
+            <textarea
+              id="message-content"
+              class="message-textarea w-full px-4 py-3 bg-white/10 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/50 backdrop-blur-sm transition-all resize-none"
+              rows="4"
+              placeholder="写下你的留言..."
+              aria-label="留言内容"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            id="message-submit-btn"
+            class="message-submit-btn px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 bg-amber-500 text-gray-900 shadow-lg shadow-amber-500/25 hover:bg-amber-400"
+          >
+            提交留言
+          </button>
+        </form>
+
+        <div id="message-list" class="space-y-4">
+          <!-- 留言由 JS 动态渲染 -->
+        </div>
       </div>
     </section>
   </main>
@@ -184,7 +269,8 @@
           <p class="text-xs text-gray-500 mt-1">经典高分电影推荐展示站</p>
         </div>
         <div class="flex items-center space-x-4">
-          <a href="#" class="text-gray-500 hover:text-gray-300 transition-colors text-sm" aria-label="GitHub 仓库">
+          <a href="resume.html" class="text-gray-500 hover:text-gray-300 transition-colors text-sm">关于站长</a>
+          <a href="https://github.com/Nagato-YUKI/movie-recommendation-wall" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-gray-300 transition-colors text-sm" aria-label="GitHub 仓库">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"/>
             </svg>
@@ -193,6 +279,55 @@
       </div>
     </div>
   </footer>
+
+  <!-- Lightbox 图片放大查看 -->
+  <div id="lightbox-overlay" class="hidden" role="dialog" aria-modal="true" aria-label="图片放大查看">
+    <div class="lightbox-content">
+      <!-- 关闭按钮 -->
+      <button
+        type="button"
+        id="lightbox-close"
+        class="lightbox-close"
+        aria-label="关闭"
+      >
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <!-- 左箭头 -->
+      <button
+        type="button"
+        id="lightbox-prev"
+        class="lightbox-nav lightbox-nav-prev"
+        aria-label="上一张"
+      >
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+
+      <!-- 图片容器 -->
+      <div class="lightbox-image-wrapper">
+        <img id="lightbox-image" src="" alt="" class="lightbox-image">
+      </div>
+
+      <!-- 右箭头 -->
+      <button
+        type="button"
+        id="lightbox-next"
+        class="lightbox-nav lightbox-nav-next"
+        aria-label="下一张"
+      >
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+
+      <!-- 标题 -->
+      <p id="lightbox-caption" class="lightbox-caption"></p>
+    </div>
+  </div>
 
   <!-- 主逻辑脚本 -->
   <script src="js/app.js"></script>
