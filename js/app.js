@@ -78,7 +78,7 @@ const MOVIES_DATA = [
     description: '地球环境恶化，前飞行员库珀临危受命，穿越虫洞寻找人类新家园。在浩瀚宇宙中，爱与引力跨越维度，成为连接过去与未来的唯一桥梁。诺兰用硬核科幻包裹深情内核，打造了一部关于时间、空间与亲情的史诗。',
     quote: '爱是唯一可以穿越时间的力量。',
     image: 'images/movie_1.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12345.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173902.html',
   },
   {
     id: 'movie_2',
@@ -92,7 +92,7 @@ const MOVIES_DATA = [
     description: '复制人K在追查一个埋藏三十年的秘密时，逐渐逼近关于自身身份的真相。维伦纽瓦以极致的视觉美学重构赛博朋克世界，在霓虹废墟与橙色荒漠间，追问何以为人的终极命题。',
     quote: '每一帧都是壁纸的科幻美学巅峰。',
     image: 'images/movie_2.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12346.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173903.html',
   },
   {
     id: 'movie_3',
@@ -106,7 +106,7 @@ const MOVIES_DATA = [
     description: '企业家艾德里安被指控谋杀情人，他请来金牌女律师为自己辩护。随着对话深入，真相不断被推翻重建，层层反转令人窒息。不到最后一秒，你永远猜不到结局。',
     quote: '43 处反转，最后一刻颠覆所有认知。',
     image: 'images/movie_3.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12347.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173904.html',
   },
   {
     id: 'movie_4',
@@ -120,7 +120,7 @@ const MOVIES_DATA = [
     description: '1984 年东德，秘密警察卫斯勒奉命监听剧作家德莱曼，却在监听过程中逐渐被艺术与人性打动，最终选择默默守护。一部关于良知觉醒的冷峻杰作，结尾五分钟足以让人泪崩。',
     quote: '沉默的守护，是最深沉的救赎。',
     image: 'images/movie_4.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12348.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173905.html',
   },
   {
     id: 'movie_5',
@@ -134,7 +134,7 @@ const MOVIES_DATA = [
     description: '少女千寻误入神灵世界，为救父母踏上成长之旅。在汤屋的奇幻世界里，她学会独立、勇敢与善良。宫崎骏用瑰丽想象编织的成人童话，关于迷失与找回自我的永恒寓言。',
     quote: '成长，就是一场不回头的前行。',
     image: 'images/movie_5.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12349.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173906.html',
   },
   {
     id: 'movie_6',
@@ -148,7 +148,7 @@ const MOVIES_DATA = [
     description: '普通少年迈尔斯被放射性蜘蛛咬伤后，与来自平行宇宙的六位蜘蛛侠联手拯救世界。影片以突破性的漫画视觉风格重新定义动画美学，证明任何人都可以戴上那张面具。',
     quote: '画风炸裂，任何人都可以成为英雄。',
     image: 'images/movie_6.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12350.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173907.html',
   },
   {
     id: 'movie_7',
@@ -162,7 +162,7 @@ const MOVIES_DATA = [
     description: '银行家安迪蒙冤入狱，在肖申克监狱的十九年里，他用一把小锤凿穿高墙，用希望对抗体制化的绝望。当他在暴雨中张开双臂，自由的光芒照亮了每一个被生活困住的人。',
     quote: '希望是美好的，也许是人间至善。',
     image: 'images/movie_7.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12351.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173908.html',
   },
   {
     id: 'movie_8',
@@ -176,7 +176,7 @@ const MOVIES_DATA = [
     description: '孤儿海蒂被送到阿尔卑斯山与孤僻的爷爷同住，她的纯真与善良融化了爷爷的心，也治愈了富家小姐克拉拉。阿尔卑斯山的壮丽风光与纯粹情感交织，是一部洗涤心灵的温暖之作。',
     quote: '阿尔卑斯的风，吹散所有阴霾。',
     image: 'images/movie_8.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12352.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173909.html',
   },
   {
     id: 'movie_9',
@@ -190,7 +190,7 @@ const MOVIES_DATA = [
     description: '穷画家杰克与贵族少女露丝在豪华邮轮上相遇，跨越阶级的爱情在冰山撞击的生死关头绽放出永恒光芒。卡梅隆用史诗般的叙事与震撼视效，谱写了一曲关于爱与牺牲的千古绝唱。',
     quote: '你跳，我就跳。',
     image: 'images/movie_9.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12353.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173910.html',
   },
   {
     id: 'movie_10',
@@ -204,7 +204,7 @@ const MOVIES_DATA = [
     description: '至尊宝为救白晶晶穿越回五百年前，却与紫霞仙子展开一段注定悲剧的宿命之恋。无厘头笑料包裹深情内核，结尾城墙上的一吻成为华语影史最经典的遗憾与成全。',
     quote: '曾经有一份真诚的爱情放在我面前……',
     image: 'images/movie_10.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12354.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173911.html',
   },
   {
     id: 'movie_11',
@@ -218,7 +218,7 @@ const MOVIES_DATA = [
     description: '二战期间，德国商人辛德勒在克拉科夫开设工厂，倾家荡产拯救了上千名犹太人的生命。斯皮尔伯格用黑白影像记录下人性在黑暗年代的光辉，红衣女孩的一抹色彩刺痛了整个世界。',
     quote: '凡救一命，即救全世界。',
     image: 'images/movie_11.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12355.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173912.html',
   },
   {
     id: 'movie_12',
@@ -232,7 +232,7 @@ const MOVIES_DATA = [
     description: '犹太青年圭多用乐观与幽默为儿子在纳粹集中营中编织了一场最温柔的谎言，将残酷的现实化作赢取坦克的游戏。父爱如山，在至暗时刻依然守护住孩子心中最纯净的阳光。',
     quote: '早安！公主！',
     image: 'images/movie_12.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12356.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173913.html',
   },
   {
     id: 'movie_13',
@@ -246,7 +246,7 @@ const MOVIES_DATA = [
     description: '二战初期，温斯顿·丘吉尔在内外交困中临危受命，以钢铁般的意志带领英国走出投降阴影，坚定走向抵抗法西斯的道路。加里·奥德曼神级演技还原了这位传奇首相最艰难的历史抉择。',
     quote: '没有最终的成功，也没有致命的失败，最可贵的是继续前进的勇气。',
     image: 'images/movie_13.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/index.php/vod/detail/id/12357.html',
+    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173914.html',
   },
 ];
 
