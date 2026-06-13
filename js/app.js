@@ -1,6 +1,7 @@
 /**
  * 影荐墙 - 主逻辑脚本
- * 功能：数据管理、渲染、搜索、筛选、收藏、点赞、评分、留言、Lightbox、懒加载、动效
+ * 功能：数据管理、渲染、搜索、筛选、排序、分页、收藏、点赞、评分、留言、Lightbox、懒加载、动效、主题切换、导出
+ * 数据来源：js/data.js（全局变量 MOVIES_DATA）
  */
 
 // ============================================
@@ -19,8 +20,17 @@ const STORAGE_KEY_LIKES = 'movie_likes';
 /** localStorage 评分数据的键名 */
 const STORAGE_KEY_RATINGS = 'movie_ratings';
 
+/** localStorage 主题偏好的键名 */
+const THEME_STORAGE_KEY = 'theme_preference';
+
 /** 防抖延迟时间（毫秒） */
 const DEBOUNCE_DELAY = 200;
+
+/** 每页显示电影数量 */
+const PER_PAGE = 24;
+
+/** 经典地区列表（用于"其他"地区归类） */
+const KNOWN_REGIONS = ['美国', '英国', '日本', '韩国', '中国', '法国', '印度', '德国'];
 
 /** 分类标签到 CSS 类名的映射 */
 const TAG_CLASS_MAP = {
@@ -39,215 +49,16 @@ const TAG_CLASS_MAP = {
   '战争': 'tag-war',
   '传记': 'tag-biography',
   '历史': 'tag-history',
+  '音乐': 'tag-music',
+  '恐怖': 'tag-horror',
+  '纪录片': 'tag-documentary',
+  '运动': 'tag-sport',
 };
 
 /** 分类主标签列表（用于筛选） */
-const MAIN_CATEGORIES = ['科幻', '悬疑', '动画', '剧情', '爱情', '喜剧', '战争', '传记', '历史'];
-
-// ============================================
-// 电影数据（硬编码）
-// ============================================
-
-/**
- * 13 部电影的完整数据
- * @type {Array<{
- *   id: string,
- *   title: string,
- *   originalTitle: string,
- *   year: number,
- *   director: string,
- *   cast: string[],
- *   categories: string[],
- *   rating: number,
- *   description: string,
- *   quote: string,
- *   image: string,
- *   detailUrl: string
- * }>}
- */
-const MOVIES_DATA = [
-  {
-    id: 'movie_1',
-    title: '星际穿越',
-    originalTitle: 'Interstellar',
-    year: 2014,
-    director: '克里斯托弗·诺兰',
-    cast: ['马修·麦康纳', '安妮·海瑟薇', '杰西卡·查斯坦', '迈克尔·凯恩'],
-    categories: ['科幻', '冒险'],
-    rating: 9.4,
-    description: '地球环境恶化，前飞行员库珀临危受命，穿越虫洞寻找人类新家园。在浩瀚宇宙中，爱与引力跨越维度，成为连接过去与未来的唯一桥梁。诺兰用硬核科幻包裹深情内核，打造了一部关于时间、空间与亲情的史诗。',
-    quote: '爱是唯一可以穿越时间的力量。',
-    image: 'images/movie_1.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/157398.html',
-  },
-  {
-    id: 'movie_2',
-    title: '银翼杀手 2049',
-    originalTitle: 'Blade Runner 2049',
-    year: 2017,
-    director: '丹尼斯·维伦纽瓦',
-    cast: ['瑞恩·高斯林', '哈里森·福特', '安娜·德·阿玛斯', '杰瑞德·莱托'],
-    categories: ['科幻', '惊悚'],
-    rating: 9.2,
-    description: '复制人K在追查一个埋藏三十年的秘密时，逐渐逼近关于自身身份的真相。维伦纽瓦以极致的视觉美学重构赛博朋克世界，在霓虹废墟与橙色荒漠间，追问何以为人的终极命题。',
-    quote: '每一帧都是壁纸的科幻美学巅峰。',
-    image: 'images/movie_2.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/213509.html',
-  },
-  {
-    id: 'movie_3',
-    title: '看不见的客人',
-    originalTitle: 'Contratiempo',
-    year: 2016,
-    director: '奥里奥尔·保罗',
-    cast: ['马里奥·卡萨斯', '阿娜·瓦格纳', '何塞·科罗纳多', '巴巴拉·莱涅'],
-    categories: ['悬疑', '犯罪'],
-    rating: 9.1,
-    description: '企业家艾德里安被指控谋杀情人，他请来金牌女律师为自己辩护。随着对话深入，真相不断被推翻重建，层层反转令人窒息。不到最后一秒，你永远猜不到结局。',
-    quote: '43 处反转，最后一刻颠覆所有认知。',
-    image: 'images/movie_3.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/251332.html',
-  },
-  {
-    id: 'movie_4',
-    title: '窃听风暴',
-    originalTitle: 'Das Leben der Anderen',
-    year: 2006,
-    director: '弗洛里安·亨克尔·冯·多纳斯马',
-    cast: ['乌尔里希·穆埃', '塞巴斯蒂安·科赫', '马蒂娜·格德克', '乌尔里希·图库尔'],
-    categories: ['悬疑', '剧情'],
-    rating: 9.3,
-    description: '1984 年东德，秘密警察卫斯勒奉命监听剧作家德莱曼，却在监听过程中逐渐被艺术与人性打动，最终选择默默守护。一部关于良知觉醒的冷峻杰作，结尾五分钟足以让人泪崩。',
-    quote: '沉默的守护，是最深沉的救赎。',
-    image: 'images/movie_4.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/158893.html',
-  },
-  {
-    id: 'movie_5',
-    title: '千与千寻',
-    originalTitle: '千と千尋の神隠し',
-    year: 2001,
-    director: '宫崎骏',
-    cast: ['柊瑠美', '入野自由', '夏木真理', '菅原文太'],
-    categories: ['动画', '奇幻'],
-    rating: 9.5,
-    description: '少女千寻误入神灵世界，为救父母踏上成长之旅。在汤屋的奇幻世界里，她学会独立、勇敢与善良。宫崎骏用瑰丽想象编织的成人童话，关于迷失与找回自我的永恒寓言。',
-    quote: '成长，就是一场不回头的前行。',
-    image: 'images/movie_5.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/183018.html',
-  },
-  {
-    id: 'movie_6',
-    title: '蜘蛛侠：平行宇宙',
-    originalTitle: 'Spider-Man: Into the Spider-Verse',
-    year: 2018,
-    director: '鲍勃·佩尔西切蒂 / 彼得·拉姆齐 / 罗德尼·罗斯曼',
-    cast: ['沙梅克·摩尔', '杰克·约翰逊', '海莉·斯坦菲尔德', '马赫沙拉·阿里'],
-    categories: ['动画', '动作'],
-    rating: 9.0,
-    description: '普通少年迈尔斯被放射性蜘蛛咬伤后，与来自平行宇宙的六位蜘蛛侠联手拯救世界。影片以突破性的漫画视觉风格重新定义动画美学，证明任何人都可以戴上那张面具。',
-    quote: '画风炸裂，任何人都可以成为英雄。',
-    image: 'images/movie_6.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/147224.html',
-  },
-  {
-    id: 'movie_7',
-    title: '肖申克的救赎',
-    originalTitle: 'The Shawshank Redemption',
-    year: 1994,
-    director: '弗兰克·德拉邦特',
-    cast: ['蒂姆·罗宾斯', '摩根·弗里曼', '鲍勃·冈顿', '威廉姆·赛德勒'],
-    categories: ['剧情', '犯罪'],
-    rating: 9.7,
-    description: '银行家安迪蒙冤入狱，在肖申克监狱的十九年里，他用一把小锤凿穿高墙，用希望对抗体制化的绝望。当他在暴雨中张开双臂，自由的光芒照亮了每一个被生活困住的人。',
-    quote: '希望是美好的，也许是人间至善。',
-    image: 'images/movie_7.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/154389.html',
-  },
-  {
-    id: 'movie_8',
-    title: '海蒂和爷爷',
-    originalTitle: 'Heidi',
-    year: 2015,
-    director: '阿兰·葛斯彭纳',
-    cast: ['阿努克·斯特芬', '伊莎贝尔·奥特曼', '莉莲·奈福', '布鲁诺·甘茨'],
-    categories: ['剧情', '家庭'],
-    rating: 9.3,
-    description: '孤儿海蒂被送到阿尔卑斯山与孤僻的爷爷同住，她的纯真与善良融化了爷爷的心，也治愈了富家小姐克拉拉。阿尔卑斯山的壮丽风光与纯粹情感交织，是一部洗涤心灵的温暖之作。',
-    quote: '阿尔卑斯的风，吹散所有阴霾。',
-    image: 'images/movie_8.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/173902.html',
-  },
-  {
-    id: 'movie_9',
-    title: '泰坦尼克号',
-    originalTitle: 'Titanic',
-    year: 1997,
-    director: '詹姆斯·卡梅隆',
-    cast: ['莱昂纳多·迪卡普里奥', '凯特·温斯莱特', '比利·赞恩', '凯西·贝茨'],
-    categories: ['爱情', '剧情'],
-    rating: 9.5,
-    description: '穷画家杰克与贵族少女露丝在豪华邮轮上相遇，跨越阶级的爱情在冰山撞击的生死关头绽放出永恒光芒。卡梅隆用史诗般的叙事与震撼视效，谱写了一曲关于爱与牺牲的千古绝唱。',
-    quote: '你跳，我就跳。',
-    image: 'images/movie_9.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/152057.html',
-  },
-  {
-    id: 'movie_10',
-    title: '大话西游之大圣娶亲',
-    originalTitle: 'A Chinese Odyssey Part Two',
-    year: 1995,
-    director: '刘镇伟',
-    cast: ['周星驰', '朱茵', '莫文蔚', '蔡少芬'],
-    categories: ['喜剧', '爱情', '奇幻'],
-    rating: 9.2,
-    description: '至尊宝为救白晶晶穿越回五百年前，却与紫霞仙子展开一段注定悲剧的宿命之恋。无厘头笑料包裹深情内核，结尾城墙上的一吻成为华语影史最经典的遗憾与成全。',
-    quote: '曾经有一份真诚的爱情放在我面前……',
-    image: 'images/movie_10.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/210566.html',
-  },
-  {
-    id: 'movie_11',
-    title: '辛德勒的名单',
-    originalTitle: "Schindler's List",
-    year: 1993,
-    director: '史蒂文·斯皮尔伯格',
-    cast: ['连姆·尼森', '本·金斯利', '拉尔夫·费因斯', '卡罗琳·古多尔'],
-    categories: ['战争', '传记', '历史'],
-    rating: 9.6,
-    description: '二战期间，德国商人辛德勒在克拉科夫开设工厂，倾家荡产拯救了上千名犹太人的生命。斯皮尔伯格用黑白影像记录下人性在黑暗年代的光辉，红衣女孩的一抹色彩刺痛了整个世界。',
-    quote: '凡救一命，即救全世界。',
-    image: 'images/movie_11.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/158259.html',
-  },
-  {
-    id: 'movie_12',
-    title: '美丽人生',
-    originalTitle: 'La vita è bella',
-    year: 1997,
-    director: '罗伯托·贝尼尼',
-    cast: ['罗伯托·贝尼尼', '尼可莱塔·布拉斯基', '乔治·坎塔里尼', '朱斯蒂诺·杜拉诺'],
-    categories: ['喜剧', '战争', '爱情'],
-    rating: 9.5,
-    description: '犹太青年圭多用乐观与幽默为儿子在纳粹集中营中编织了一场最温柔的谎言，将残酷的现实化作赢取坦克的游戏。父爱如山，在至暗时刻依然守护住孩子心中最纯净的阳光。',
-    quote: '早安！公主！',
-    image: 'images/movie_12.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/224409.html',
-  },
-  {
-    id: 'movie_13',
-    title: '至暗时刻',
-    originalTitle: 'Darkest Hour',
-    year: 2017,
-    director: '乔·赖特',
-    cast: ['加里·奥德曼', '克里斯汀·斯科特·托马斯', '莉莉·詹姆斯', '本·门德尔森'],
-    categories: ['传记', '历史', '剧情'],
-    rating: 8.7,
-    description: '二战初期，温斯顿·丘吉尔在内外交困中临危受命，以钢铁般的意志带领英国走出投降阴影，坚定走向抵抗法西斯的道路。加里·奥德曼神级演技还原了这位传奇首相最艰难的历史抉择。',
-    quote: '没有最终的成功，也没有致命的失败，最可贵的是继续前进的勇气。',
-    image: 'images/movie_13.jpg',
-    detailUrl: 'https://www.xiaobaotv.com/vod/detail/155744.html',
-  },
+const MAIN_CATEGORIES = [
+  '科幻', '悬疑', '动画', '剧情', '爱情', '喜剧', '战争', '传记', '历史',
+  '冒险', '惊悚', '犯罪', '奇幻', '动作', '家庭', '音乐', '恐怖', '纪录片', '运动',
 ];
 
 // ============================================
@@ -259,6 +70,24 @@ let currentCategory = 'all';
 
 /** 当前搜索关键词 */
 let currentSearchQuery = '';
+
+/** 当前排序字段 */
+let currentSort = 'rank';
+
+/** 当前排序方向（'asc' 或 'desc'） */
+let sortOrder = 'desc';
+
+/** 年份区间最小值 */
+let yearMin = 2000;
+
+/** 年份区间最大值 */
+let yearMax = 2025;
+
+/** 当前激活的地区筛选 */
+let currentRegion = 'all';
+
+/** 当前页码（从 1 开始） */
+let currentPage = 1;
 
 /** 收藏状态集合（Set 存储 movie id） */
 let favoriteSet = new Set();
@@ -286,6 +115,12 @@ let lightboxCurrentIndex = -1;
 
 /** 当前打开的弹窗电影 ID */
 let currentModalMovieId = null;
+
+/** 弹窗正在打开的防抖标记（防止双击时 overlay 误触关闭） */
+let modalIsOpening = false;
+
+/** 弹窗关闭流程标记（防止竞态：旧 transitionend 误关新弹窗） */
+let modalCloseTimer = null;
 
 /** 图片懒加载 IntersectionObserver 实例 */
 let lazyImageObserver = null;
@@ -396,8 +231,67 @@ let movieModalDescriptionEl = null;
 /** 电影详情弹窗台词元素 */
 let movieModalQuoteEl = null;
 
-/** 电影详情弹窗外部链接元素 */
-let movieModalDetailLinkEl = null;
+/** 电影详情弹窗外部链接容器 */
+let movieModalWatchLinksEl = null;
+
+// ---- 新增 DOM 引用 ----
+
+/** 统计面板：电影总数 */
+let statCountEl = null;
+
+/** 统计面板：类型数量 */
+let statGenresEl = null;
+
+/** 统计面板：平均评分 */
+let statAvgRatingEl = null;
+
+/** 统计面板：年份范围 */
+let statYearRangeEl = null;
+
+/** 排序下拉选择器 */
+let sortSelectEl = null;
+
+/** 排序方向切换按钮 */
+let sortOrderBtnEl = null;
+
+/** 排序方向图标 */
+let sortOrderIconEl = null;
+
+/** 排序方向文字 */
+let sortOrderLabelEl = null;
+
+/** 年份区间最小滑块 */
+let yearRangeMinEl = null;
+
+/** 年份区间最大滑块 */
+let yearRangeMaxEl = null;
+
+/** 年份区间标签 */
+let yearRangeLabelEl = null;
+
+/** 地区筛选按钮容器 */
+let regionFiltersEl = null;
+
+/** 分页：上一页按钮 */
+let paginationPrevEl = null;
+
+/** 分页：下一页按钮 */
+let paginationNextEl = null;
+
+/** 分页：页码容器 */
+let paginationPagesEl = null;
+
+/** 分页：信息文字 */
+let paginationInfoEl = null;
+
+/** 导出清单按钮 */
+let exportBtnEl = null;
+
+/** 主题切换按钮（桌面端） */
+let themeToggleEl = null;
+
+/** 主题切换按钮（移动端） */
+let themeToggleMobileEl = null;
 
 // ============================================
 // 工具函数
@@ -573,10 +467,281 @@ function movieHasCategory(movie, category) {
   return movie.categories.includes(category);
 }
 
+// ============================================
+// 数据统计
+// ============================================
+
 /**
- * 过滤电影列表
+ * 计算并渲染数据统计面板
+ */
+function calculateStats() {
+  if (!statCountEl || !statGenresEl || !statAvgRatingEl || !statYearRangeEl) {
+    return;
+  }
+
+  // 电影总数
+  statCountEl.textContent = MOVIES_DATA.length;
+
+  // 类型数量（去重）
+  const genreSet = new Set();
+  MOVIES_DATA.forEach((movie) => {
+    movie.categories.forEach((cat) => genreSet.add(cat));
+  });
+  statGenresEl.textContent = genreSet.size;
+
+  // 平均评分（一位小数）
+  const totalRating = MOVIES_DATA.reduce((sum, movie) => sum + movie.rating, 0);
+  const avgRating = (totalRating / MOVIES_DATA.length).toFixed(1);
+  statAvgRatingEl.textContent = avgRating;
+
+  // 年份范围
+  const years = MOVIES_DATA.map((movie) => movie.year);
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
+  statYearRangeEl.textContent = `${minYear}-${maxYear}`;
+
+  console.log('数据统计面板已更新：', {
+    总数: MOVIES_DATA.length,
+    类型数: genreSet.size,
+    平均分: avgRating,
+    年份范围: `${minYear}-${maxYear}`,
+  });
+}
+
+// ============================================
+// 排名徽章
+// ============================================
+
+/**
+ * 获取排名徽章的样式类名
+ * @param {number} rank - 排名（1-100）
+ * @returns {{ bgClass: string, textClass: string }}
+ */
+function getRankBadgeStyle(rank) {
+  if (rank === 1) {
+    return { bgClass: 'bg-amber-500/90', textClass: 'text-white' };
+  }
+  if (rank <= 3) {
+    return { bgClass: 'bg-gray-300/80', textClass: 'text-gray-800' };
+  }
+  return { bgClass: 'bg-gray-500/70', textClass: 'text-white' };
+}
+
+// ============================================
+// 排序功能
+// ============================================
+
+/**
+ * 对电影数组进行排序
+ * @param {Array<Object>} movies - 电影数组
+ * @returns {Array<Object>} 排序后的新数组
+ */
+function sortMovies(movies) {
+  const sorted = [...movies];
+
+  sorted.sort((a, b) => {
+    let comparison = 0;
+
+    switch (currentSort) {
+      case 'rank':
+        comparison = a.rank - b.rank;
+        break;
+      case 'rating':
+        comparison = a.rating - b.rating;
+        break;
+      case 'year':
+        comparison = a.year - b.year;
+        break;
+      case 'title':
+        comparison = a.title.localeCompare(b.title, 'zh');
+        break;
+      default:
+        comparison = a.rank - b.rank;
+    }
+
+    // 如果主排序字段相同，按 rank 作为次要排序
+    if (comparison === 0 && currentSort !== 'rank') {
+      comparison = a.rank - b.rank;
+    }
+
+    return sortOrder === 'asc' ? comparison : -comparison;
+  });
+
+  return sorted;
+}
+
+/**
+ * 处理排序方式变更
+ */
+function handleSortChange() {
+  if (!sortSelectEl) {
+    return;
+  }
+  currentSort = sortSelectEl.value;
+  currentPage = 1;
+  refreshMovieDisplay();
+  console.log('排序方式切换为:', currentSort, '方向:', sortOrder);
+}
+
+/**
+ * 处理排序方向切换
+ */
+function handleSortOrderToggle() {
+  sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+
+  if (sortOrderIconEl) {
+    sortOrderIconEl.innerHTML = sortOrder === 'asc' ? '&uarr;' : '&darr;';
+  }
+  if (sortOrderLabelEl) {
+    sortOrderLabelEl.textContent = sortOrder === 'asc' ? '升序' : '降序';
+  }
+
+  currentPage = 1;
+  refreshMovieDisplay();
+  console.log('排序方向切换为:', sortOrder);
+}
+
+// ============================================
+// 年份区间筛选
+// ============================================
+
+/**
+ * 处理年份区间变更
+ */
+function handleYearRangeChange() {
+  if (!yearRangeMinEl || !yearRangeMaxEl || !yearRangeLabelEl) {
+    return;
+  }
+
+  let min = parseInt(yearRangeMinEl.value, 10);
+  let max = parseInt(yearRangeMaxEl.value, 10);
+
+  // 确保 min <= max
+  if (min > max) {
+    if (yearRangeMinEl === document.activeElement) {
+      yearRangeMaxEl.value = min;
+      max = min;
+    } else {
+      yearRangeMinEl.value = max;
+      min = max;
+    }
+  }
+
+  yearMin = min;
+  yearMax = max;
+  yearRangeLabelEl.textContent = `${yearMin} - ${yearMax}`;
+
+  currentPage = 1;
+  refreshMovieDisplay();
+}
+
+// ============================================
+// 地区筛选
+// ============================================
+
+/**
+ * 更新地区筛选按钮的高亮状态
+ */
+function updateRegionButtons() {
+  if (!regionFiltersEl) {
+    return;
+  }
+
+  const buttons = regionFiltersEl.querySelectorAll('.region-btn');
+  buttons.forEach((btn) => {
+    const region = btn.dataset.region;
+    const isActive = region === currentRegion;
+
+    if (isActive) {
+      btn.classList.remove('bg-white/10', 'text-gray-300', 'hover:bg-white/20', 'border', 'border-gray-600/50');
+      btn.classList.add('bg-amber-500', 'text-gray-900', 'shadow-lg', 'shadow-amber-500/25');
+    } else {
+      btn.classList.remove('bg-amber-500', 'text-gray-900', 'shadow-lg', 'shadow-amber-500/25');
+      btn.classList.add('bg-white/10', 'text-gray-300', 'hover:bg-white/20', 'border', 'border-gray-600/50');
+    }
+  });
+}
+
+/**
+ * 处理地区按钮点击
+ * @param {Event} event - click 事件对象
+ */
+function handleRegionClick(event) {
+  const button = event.target.closest('.region-btn');
+  if (!button) {
+    return;
+  }
+
+  const region = button.dataset.region;
+  if (!region || region === currentRegion) {
+    return;
+  }
+
+  currentRegion = region;
+  updateRegionButtons();
+  currentPage = 1;
+  refreshMovieDisplay();
+  console.log('地区筛选切换为:', currentRegion);
+}
+
+// ============================================
+// 筛选核心逻辑
+// ============================================
+
+/**
+ * 过滤电影列表（分类 + 搜索 + 年份区间 + 地区）
  * @returns {Array<Object>} 过滤后的电影数组
  */
+/**
+ * 文本规范化：移除标点符号和特殊字符，转小写
+ * @param {string} str - 原始文本
+ * @returns {string} 规范化后的文本
+ */
+function normalizeText(str) {
+  return str
+    .toLowerCase()
+    .replace(/[·•‧・･—\-—\s,，、。．.：:；;！!？?()（）【】\[\]《》""''""'']/g, '');
+}
+
+/**
+ * 模糊匹配：检查 query 中的字符是否按顺序出现在 target 中
+ * @param {string} query - 搜索关键词
+ * @param {string} target - 被搜索文本
+ * @returns {boolean} 是否匹配
+ */
+function fuzzyMatch(query, target) {
+  const q = normalizeText(query);
+  const t = normalizeText(target);
+
+  if (!q) return true;
+
+  // 1. 直接包含匹配（规范化后）
+  if (t.includes(q)) {
+    return true;
+  }
+
+  // 2. 顺序字符匹配：query 的每个字符按顺序出现在 target 中
+  //    允许中间跳过字符，容忍缺字和错字
+  let qi = 0;
+  for (let ti = 0; ti < t.length && qi < q.length; ti++) {
+    if (t[ti] === q[qi]) {
+      qi++;
+    }
+  }
+  if (qi === q.length) {
+    return true;
+  }
+
+  // 3. 反向顺序匹配（用户可能把字序写反）
+  qi = 0;
+  for (let ti = t.length - 1; ti >= 0 && qi < q.length; ti--) {
+    if (t[ti] === q[qi]) {
+      qi++;
+    }
+  }
+  return qi === q.length;
+}
+
 function filterMovies() {
   return MOVIES_DATA.filter((movie) => {
     // 分类过滤
@@ -587,19 +752,340 @@ function filterMovies() {
       return false;
     }
 
-    // 搜索过滤
-    if (!currentSearchQuery) {
-      return true;
+    // 搜索过滤（模糊匹配）
+    if (currentSearchQuery) {
+      const query = currentSearchQuery.toLowerCase();
+      const titleMatch = fuzzyMatch(query, movie.title);
+      const originalTitleMatch = fuzzyMatch(query, movie.originalTitle);
+      const descMatch = fuzzyMatch(query, movie.description);
+      const directorMatch = fuzzyMatch(query, movie.director);
+
+      if (!(titleMatch || originalTitleMatch || descMatch || directorMatch)) {
+        return false;
+      }
     }
 
-    const query = currentSearchQuery.toLowerCase();
-    const titleMatch = movie.title.toLowerCase().includes(query);
-    const originalTitleMatch = movie.originalTitle.toLowerCase().includes(query);
-    const descMatch = movie.description.toLowerCase().includes(query);
-    const directorMatch = movie.director.toLowerCase().includes(query);
+    // 年份区间过滤
+    if (movie.year < yearMin || movie.year > yearMax) {
+      return false;
+    }
 
-    return titleMatch || originalTitleMatch || descMatch || directorMatch;
+    // 地区过滤
+    if (currentRegion !== 'all') {
+      if (currentRegion === '其他') {
+        // "其他" 匹配不在经典地区列表中的所有地区
+        if (KNOWN_REGIONS.includes(movie.region)) {
+          return false;
+        }
+      } else {
+        if (movie.region !== currentRegion) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   });
+}
+
+/**
+ * 统一刷新显示（筛选 + 排序 + 分页后渲染）
+ */
+function refreshMovieDisplay() {
+  const filtered = filterMovies();
+  const sorted = sortMovies(filtered);
+  const paginated = paginateMovies(sorted);
+  renderMovieList(paginated);
+  renderPagination(sorted.length, currentPage);
+}
+
+// ============================================
+// 分页功能
+// ============================================
+
+/**
+ * 从电影数组中截取当前页的电影
+ * @param {Array<Object>} movies - 过滤并排序后的电影数组
+ * @returns {Array<Object>} 当前页的电影数组
+ */
+function paginateMovies(movies) {
+  const startIndex = (currentPage - 1) * PER_PAGE;
+  const endIndex = startIndex + PER_PAGE;
+  return movies.slice(startIndex, endIndex);
+}
+
+/**
+ * 渲染分页器
+ * @param {number} totalItems - 总电影数量
+ * @param {number} page - 当前页码
+ */
+function renderPagination(totalItems, page) {
+  if (!paginationPrevEl || !paginationNextEl || !paginationPagesEl || !paginationInfoEl) {
+    return;
+  }
+
+  const totalPages = Math.ceil(totalItems / PER_PAGE) || 1;
+
+  // 更新信息文字
+  paginationInfoEl.textContent = `第 ${page} 页 / 共 ${totalPages} 页`;
+
+  // 更新上一页/下一页按钮状态
+  paginationPrevEl.disabled = page <= 1;
+  paginationNextEl.disabled = page >= totalPages;
+
+  // 渲染页码按钮
+  let pagesHtml = '';
+
+  // 计算显示的页码范围（最多显示 7 个页码按钮）
+  let startPage = Math.max(1, page - 3);
+  let endPage = Math.min(totalPages, page + 3);
+
+  // 调整范围确保始终显示 7 个（如果总数够的话）
+  if (endPage - startPage < 6) {
+    if (startPage === 1) {
+      endPage = Math.min(totalPages, startPage + 6);
+    } else if (endPage === totalPages) {
+      startPage = Math.max(1, endPage - 6);
+    }
+  }
+
+  // 第一页
+  if (startPage > 1) {
+    pagesHtml += `<button type="button" class="pagination-page-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors" data-page="1" aria-label="第1页">1</button>`;
+    if (startPage > 2) {
+      pagesHtml += `<span class="px-1 text-gray-400 text-sm">...</span>`;
+    }
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    const isActive = i === page;
+    const activeClass = isActive
+      ? 'bg-amber-500 text-white shadow-md'
+      : 'bg-gray-200 text-gray-700 hover:bg-gray-300';
+    pagesHtml += `<button type="button" class="pagination-page-btn px-3 py-1.5 rounded-lg text-sm font-medium ${activeClass} transition-colors" data-page="${i}" aria-label="第${i}页" ${isActive ? 'aria-current="page"' : ''}>${i}</button>`;
+  }
+
+  // 最后一页
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      pagesHtml += `<span class="px-1 text-gray-400 text-sm">...</span>`;
+    }
+    pagesHtml += `<button type="button" class="pagination-page-btn px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors" data-page="${totalPages}" aria-label="第${totalPages}页">${totalPages}</button>`;
+  }
+
+  paginationPagesEl.innerHTML = pagesHtml;
+
+  // 绑定页码按钮点击事件
+  const pageButtons = paginationPagesEl.querySelectorAll('.pagination-page-btn');
+  pageButtons.forEach((btn) => {
+    btn.addEventListener('click', handlePageClick);
+  });
+}
+
+/**
+ * 处理页码按钮点击
+ * @param {Event} event - click 事件对象
+ */
+function handlePageClick(event) {
+  const button = event.target.closest('.pagination-page-btn');
+  if (!button) {
+    return;
+  }
+
+  const page = parseInt(button.dataset.page, 10);
+  if (!page || page === currentPage) {
+    return;
+  }
+
+  currentPage = page;
+  refreshMovieDisplay();
+
+  // 平滑滚动到电影列表区域
+  const movieSection = document.getElementById('movie-section');
+  if (movieSection) {
+    movieSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  console.log('切换到第', currentPage, '页');
+}
+
+/**
+ * 处理上一页按钮点击
+ */
+function handlePaginationPrev() {
+  if (currentPage <= 1) {
+    return;
+  }
+  currentPage -= 1;
+  refreshMovieDisplay();
+
+  const movieSection = document.getElementById('movie-section');
+  if (movieSection) {
+    movieSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/**
+ * 处理下一页按钮点击
+ */
+function handlePaginationNext() {
+  const filtered = filterMovies();
+  const totalPages = Math.ceil(filtered.length / PER_PAGE) || 1;
+  if (currentPage >= totalPages) {
+    return;
+  }
+  currentPage += 1;
+  refreshMovieDisplay();
+
+  const movieSection = document.getElementById('movie-section');
+  if (movieSection) {
+    movieSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ============================================
+// 主题切换
+// ============================================
+
+/**
+ * 获取当前主题
+ * @returns {'dark'|'light'}
+ */
+function getCurrentTheme() {
+  return document.documentElement.getAttribute('data-theme') || 'dark';
+}
+
+/**
+ * 应用主题到 DOM
+ * @param {'dark'|'light'} theme - 主题名称
+ */
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeIcons(theme);
+}
+
+/**
+ * 更新主题切换按钮中的图标
+ * @param {'dark'|'light'} theme - 当前主题
+ */
+function updateThemeIcons(theme) {
+  // 暗色模式显示月亮图标，亮色模式显示太阳图标
+  const moonIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
+  const sunIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
+
+  const iconHtml = theme === 'dark' ? moonIcon : sunIcon;
+  const label = theme === 'dark' ? '切换亮色主题' : '切换暗色主题';
+
+  if (themeToggleEl) {
+    themeToggleEl.innerHTML = iconHtml;
+    themeToggleEl.setAttribute('aria-label', label);
+  }
+  if (themeToggleMobileEl) {
+    // 移动端按钮中有文字，需要保留"切换主题"文字
+    themeToggleMobileEl.innerHTML = `${iconHtml} 切换主题`;
+    themeToggleMobileEl.setAttribute('aria-label', label);
+  }
+}
+
+/**
+ * 处理主题切换
+ */
+function handleThemeToggle() {
+  const currentTheme = getCurrentTheme();
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+  applyTheme(newTheme);
+
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+  } catch (error) {
+    console.warn('保存主题偏好失败:', error);
+  }
+
+  console.log('主题切换为:', newTheme);
+}
+
+/**
+ * 初始化主题（从 localStorage 读取偏好）
+ */
+function initTheme() {
+  let theme = 'dark'; // 默认暗色
+
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    if (stored === 'dark' || stored === 'light') {
+      theme = stored;
+    }
+  } catch (error) {
+    console.warn('读取主题偏好失败:', error);
+  }
+
+  applyTheme(theme);
+  console.log('主题初始化:', theme);
+}
+
+// ============================================
+// 导出清单
+// ============================================
+
+/**
+ * 处理导出清单按钮点击
+ */
+function handleExport() {
+  const filtered = filterMovies();
+  const sorted = sortMovies(filtered);
+
+  if (sorted.length === 0) {
+    showToast('没有可导出的电影');
+    return;
+  }
+
+  // 格式：排名. 中文片名（英文片名） - 评分/10 - 年份
+  const lines = sorted.map((movie) => {
+    return `${movie.rank}. ${movie.title}（${movie.originalTitle}） - ${movie.rating}/10 - ${movie.year}`;
+  });
+
+  const text = lines.join('\n');
+
+  copyToClipboard(text, `已复制 ${sorted.length} 部电影清单到剪贴板`);
+}
+
+/**
+ * 复制文本到剪贴板
+ * @param {string} text - 要复制的文本
+ * @param {string} successMessage - 成功提示消息
+ */
+function copyToClipboard(text, successMessage) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(successMessage);
+    }).catch(() => {
+      fallbackCopy(text, successMessage);
+    });
+  } else {
+    fallbackCopy(text, successMessage);
+  }
+}
+
+/**
+ * 兜底复制方案（使用 textarea）
+ * @param {string} text - 要复制的文本
+ * @param {string} successMessage - 成功提示消息
+ */
+function fallbackCopy(text, successMessage) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showToast(successMessage);
+  } catch (err) {
+    showToast('复制失败，请手动复制');
+  }
+  document.body.removeChild(textarea);
 }
 
 // ============================================
@@ -639,6 +1125,13 @@ function renderMovieCard(movie) {
     })
     .join('');
 
+  // 排名徽章
+  const rankBadgeStyle = getRankBadgeStyle(movie.rank);
+  const rankBadgeHtml = `
+    <div class="rank-badge absolute top-2 left-2 z-10 flex items-center justify-center w-8 h-8 rounded-full ${rankBadgeStyle.bgClass} ${rankBadgeStyle.textClass} text-xs font-bold shadow-md backdrop-blur-sm" title="排名 #${movie.rank}" aria-label="排名第${movie.rank}">
+      #${movie.rank}
+    </div>`;
+
   return `
     <article class="movie-card" data-movie-id="${movie.id}">
       <div class="movie-card-inner bg-white rounded-xl shadow-md overflow-hidden h-full flex flex-col">
@@ -651,6 +1144,7 @@ function renderMovieCard(movie) {
             onload="this.parentElement.classList.remove('is-loading')"
             onerror="this.parentElement.classList.remove('is-loading'); this.src='https://placehold.co/600x900/e5e7eb/9ca3af?text=${encodeURIComponent(movie.title)}'"
           >
+          ${rankBadgeHtml}
           <!-- 收藏按钮 -->
           <button
             type="button"
@@ -677,7 +1171,7 @@ function renderMovieCard(movie) {
           <!-- 点赞按钮 -->
           <button
             type="button"
-            class="like-btn absolute top-3 left-3 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md ${likeClass}"
+            class="like-btn absolute top-3 left-12 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md ${likeClass}"
             aria-label="点赞《${movie.title}》"
             aria-pressed="${isLiked}"
             data-movie-id="${movie.id}"
@@ -749,16 +1243,28 @@ function renderMovieList(movies) {
     return;
   }
 
-  // 更新结果计数
-  resultCountEl.textContent = `共 ${movies.length} 部`;
+  // 更新结果计数（使用过滤后的总数，而非当前页数量）
+  const filtered = filterMovies();
+  resultCountEl.textContent = `共 ${filtered.length} 部`;
 
   if (movies.length === 0) {
     movieGridEl.innerHTML = '';
     emptyStateEl.classList.remove('hidden');
+    // 隐藏分页器
+    const paginationContainer = document.getElementById('pagination-container');
+    if (paginationContainer) {
+      paginationContainer.style.display = 'none';
+    }
     return;
   }
 
   emptyStateEl.classList.add('hidden');
+  // 显示分页器
+  const paginationContainer = document.getElementById('pagination-container');
+  if (paginationContainer) {
+    paginationContainer.style.display = '';
+  }
+
   movieGridEl.innerHTML = movies.map(renderMovieCard).join('');
 
   // 重新绑定收藏按钮事件
@@ -865,8 +1371,8 @@ function escapeHtml(text) {
 function handleSearchInput(event) {
   const value = event.target.value.trim();
   currentSearchQuery = value;
-  const filtered = filterMovies();
-  renderMovieList(filtered);
+  currentPage = 1;
+  refreshMovieDisplay();
 }
 
 /**
@@ -885,10 +1391,9 @@ function handleCategoryClick(event) {
   }
 
   currentCategory = category;
+  currentPage = 1;
   updateCategoryButtons();
-
-  const filtered = filterMovies();
-  renderMovieList(filtered);
+  refreshMovieDisplay();
 }
 
 /**
@@ -1001,16 +1506,8 @@ function handleRatingClick(event) {
 
   saveRatingsToStorage(ratingMap);
 
-  // 重新渲染该卡片的评分区域
-  const card = document.querySelector(`.movie-card[data-movie-id="${movieId}"]`);
-  if (card) {
-    const movie = MOVIES_DATA.find((m) => m.id === movieId);
-    if (movie) {
-      // 为了简单，直接重新渲染整个列表
-      const filtered = filterMovies();
-      renderMovieList(filtered);
-    }
-  }
+  // 重新渲染
+  refreshMovieDisplay();
 }
 
 /**
@@ -1370,19 +1867,39 @@ function openMovieModal(movieId) {
 
   // 填充台词
   if (movieModalQuoteEl) {
-    movieModalQuoteEl.textContent = `“${movie.quote}”`;
+    movieModalQuoteEl.textContent = `"${movie.quote}"`;
   }
 
-  // 填充外部链接
-  if (movieModalDetailLinkEl) {
-    movieModalDetailLinkEl.href = movie.detailUrl;
+  // 填充外部观看链接列表
+  if (movieModalWatchLinksEl) {
+    const watchUrls = getWatchUrlsForMovie(movie.id);
+    const linkIcon = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>';
+    const html = watchUrls.map(item => {
+      if (item.url) {
+        return `<a href="${item.url}" target="_blank" rel="noopener noreferrer" class="watch-link-btn" title="在 ${item.siteName} 观看《${movie.title}》">${linkIcon} ${item.siteName}</a>`;
+      }
+      return `<span class="watch-link-unavailable" title="${movie.title} 在 ${item.siteName} 暂无资源">${item.siteName} 无资源</span>`;
+    }).join('');
+    movieModalWatchLinksEl.innerHTML = html;
   }
 
-  // 显示弹窗
+  // 取消任何正在进行的关闭流程（防止旧 transitionend 误关新弹窗）
+  if (modalCloseTimer) {
+    clearTimeout(modalCloseTimer);
+    modalCloseTimer = null;
+  }
+
+  // 显示弹窗（防双击关闭：打开后 350ms 内忽略 overlay 点击）
   if (movieModalOverlayEl) {
+    modalIsOpening = true;
     movieModalOverlayEl.classList.remove('hidden');
+    // 清理上一次关闭遗留的 transitionend 监听器（这是闪退 Bug 的根因！）
     requestAnimationFrame(() => {
       movieModalOverlayEl.classList.add('active');
+      // 过渡动画完成后允许 overlay 点击关闭
+      setTimeout(() => {
+        modalIsOpening = false;
+      }, 350);
     });
   }
 
@@ -1399,20 +1916,21 @@ function closeMovieModal() {
   }
 
   movieModalOverlayEl.classList.remove('active');
-  // 等待过渡动画完成后隐藏
-  const onTransitionEnd = () => {
-    movieModalOverlayEl.classList.add('hidden');
-    currentModalMovieId = null;
-    movieModalOverlayEl.removeEventListener('transitionend', onTransitionEnd);
-  };
-  movieModalOverlayEl.addEventListener('transitionend', onTransitionEnd);
-  // 兜底：如果 transitionend 未触发，300ms 后强制隐藏
-  setTimeout(() => {
-    if (!movieModalOverlayEl.classList.contains('hidden') && !movieModalOverlayEl.classList.contains('active')) {
+
+  // 取消之前未完成的关闭定时器
+  if (modalCloseTimer) {
+    clearTimeout(modalCloseTimer);
+    modalCloseTimer = null;
+  }
+
+  // 等待过渡动画完成后隐藏（用定时器而非 transitionend 事件，避免竞态条件）
+  modalCloseTimer = setTimeout(() => {
+    modalCloseTimer = null;
+    if (!movieModalOverlayEl.classList.contains('active')) {
       movieModalOverlayEl.classList.add('hidden');
       currentModalMovieId = null;
     }
-  }, 300);
+  }, 350);
 
   // 恢复 body 滚动
   document.body.style.overflow = '';
@@ -1423,6 +1941,10 @@ function closeMovieModal() {
  * @param {MouseEvent} event - 鼠标事件
  */
 function handleModalOverlayClick(event) {
+  // 弹窗正在打开过程中，忽略 overlay 点击（防止双击关闭）
+  if (modalIsOpening) {
+    return;
+  }
   if (event.target === movieModalOverlayEl) {
     closeMovieModal();
   }
@@ -1445,34 +1967,47 @@ function handleModalKeydown(event) {
 
 /**
  * 绑定电影卡片点击打开弹窗事件（事件委托）
+ * 使用命名函数引用防止重复绑定
  */
+let cardClickHandler = null;
+
 function bindMovieCardClicks() {
   if (!movieGridEl) {
     return;
   }
 
-  movieGridEl.addEventListener('click', (event) => {
+  // 移除旧的事件监听器，防止重复绑定
+  if (cardClickHandler) {
+    movieGridEl.removeEventListener('click', cardClickHandler);
+  }
+
+  cardClickHandler = (event) => {
     const card = event.target.closest('.movie-card');
     if (!card) {
       return;
     }
 
-    // 如果点击的是收藏/点赞/分享/评分/放大查看按钮，则不打开弹窗
+    // 如果点击的是收藏/点赞/分享/评分/放大查看按钮/排名徽章，则不打开弹窗
     const isActionButton = event.target.closest('.favorite-btn')
       || event.target.closest('.like-btn')
       || event.target.closest('.share-btn')
       || event.target.closest('.star-btn')
-      || event.target.closest('.lightbox-trigger');
+      || event.target.closest('.lightbox-trigger')
+      || event.target.closest('.rank-badge');
 
     if (isActionButton) {
       return;
     }
 
+    event.stopPropagation();
+
     const movieId = card.dataset.movieId;
     if (movieId) {
       openMovieModal(movieId);
     }
-  });
+  };
+
+  movieGridEl.addEventListener('click', cardClickHandler);
 }
 
 /**
@@ -1694,6 +2229,52 @@ function bindEvents() {
   if (messageFormEl) {
     messageFormEl.addEventListener('submit', handleMessageSubmit);
   }
+
+  // ---- 新增事件绑定 ----
+
+  // 排序选择器
+  if (sortSelectEl) {
+    sortSelectEl.addEventListener('change', handleSortChange);
+  }
+
+  // 排序方向切换
+  if (sortOrderBtnEl) {
+    sortOrderBtnEl.addEventListener('click', handleSortOrderToggle);
+  }
+
+  // 年份区间滑块
+  if (yearRangeMinEl) {
+    yearRangeMinEl.addEventListener('input', handleYearRangeChange);
+  }
+  if (yearRangeMaxEl) {
+    yearRangeMaxEl.addEventListener('input', handleYearRangeChange);
+  }
+
+  // 地区筛选
+  if (regionFiltersEl) {
+    regionFiltersEl.addEventListener('click', handleRegionClick);
+  }
+
+  // 分页按钮
+  if (paginationPrevEl) {
+    paginationPrevEl.addEventListener('click', handlePaginationPrev);
+  }
+  if (paginationNextEl) {
+    paginationNextEl.addEventListener('click', handlePaginationNext);
+  }
+
+  // 导出清单
+  if (exportBtnEl) {
+    exportBtnEl.addEventListener('click', handleExport);
+  }
+
+  // 主题切换
+  if (themeToggleEl) {
+    themeToggleEl.addEventListener('click', handleThemeToggle);
+  }
+  if (themeToggleMobileEl) {
+    themeToggleMobileEl.addEventListener('click', handleThemeToggle);
+  }
 }
 
 // ============================================
@@ -1742,7 +2323,34 @@ function cacheElements() {
   movieModalCategoriesEl = document.getElementById('movie-modal-categories');
   movieModalDescriptionEl = document.getElementById('movie-modal-description');
   movieModalQuoteEl = document.getElementById('movie-modal-quote');
-  movieModalDetailLinkEl = document.getElementById('movie-modal-detail-link');
+  movieModalWatchLinksEl = document.getElementById('movie-modal-watch-links');
+
+  // ---- 新增 DOM 引用 ----
+  statCountEl = document.getElementById('stat-count');
+  statGenresEl = document.getElementById('stat-genres');
+  statAvgRatingEl = document.getElementById('stat-avg-rating');
+  statYearRangeEl = document.getElementById('stat-year-range');
+
+  sortSelectEl = document.getElementById('sort-select');
+  sortOrderBtnEl = document.getElementById('sort-order-btn');
+  sortOrderIconEl = document.getElementById('sort-order-icon');
+  sortOrderLabelEl = document.getElementById('sort-order-label');
+
+  yearRangeMinEl = document.getElementById('year-range-min');
+  yearRangeMaxEl = document.getElementById('year-range-max');
+  yearRangeLabelEl = document.getElementById('year-range-label');
+
+  regionFiltersEl = document.getElementById('region-filters');
+
+  paginationPrevEl = document.getElementById('pagination-prev');
+  paginationNextEl = document.getElementById('pagination-next');
+  paginationPagesEl = document.getElementById('pagination-pages');
+  paginationInfoEl = document.getElementById('pagination-info');
+
+  exportBtnEl = document.getElementById('export-btn');
+
+  themeToggleEl = document.getElementById('theme-toggle');
+  themeToggleMobileEl = document.getElementById('theme-toggle-mobile');
 }
 
 /**
@@ -1751,6 +2359,12 @@ function cacheElements() {
 function init() {
   // 缓存 DOM 引用
   cacheElements();
+
+  // 初始化主题
+  initTheme();
+
+  // 计算并渲染数据统计面板
+  calculateStats();
 
   // 从 localStorage 加载收藏数据
   favoriteSet = loadFavoritesFromStorage();
@@ -1789,8 +2403,8 @@ function init() {
   // 绑定弹窗键盘事件
   document.addEventListener('keydown', handleModalKeydown);
 
-  // 初始渲染全部电影
-  renderMovieList(MOVIES_DATA);
+  // 初始渲染（使用 refreshMovieDisplay 支持排序+分页）
+  refreshMovieDisplay();
 
   // 初始渲染留言列表
   renderMessageList();
@@ -1798,7 +2412,7 @@ function init() {
   // 初始化回到顶部按钮状态
   handleScroll();
 
-  console.log('影荐墙初始化完成');
+  console.log('影荐墙初始化完成（100部数据，排序/分页/主题/导出/地区/年份筛选已启用）');
 }
 
 // DOM 加载完成后执行初始化

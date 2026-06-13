@@ -39,6 +39,16 @@
           <a href="#movie-section" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">首页</a>
           <a href="#message-board" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">留言板</a>
           <a href="resume.html" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">关于站长</a>
+          <button
+            type="button"
+            id="theme-toggle"
+            class="p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800 transition-colors"
+            aria-label="切换主题"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            </svg>
+          </button>
         </nav>
 
         <!-- 移动端汉堡菜单按钮 -->
@@ -62,6 +72,17 @@
         <a href="#movie-section" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">首页</a>
         <a href="#message-board" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">留言板</a>
         <a href="resume.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors">关于站长</a>
+        <button
+          type="button"
+          id="theme-toggle-mobile"
+          class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors flex items-center gap-2"
+          aria-label="切换主题"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+          切换主题
+        </button>
       </div>
     </div>
   </header>
@@ -81,8 +102,28 @@
           发现<span class="text-amber-400">经典</span>，遇见<span class="text-sky-400">好电影</span>
         </h1>
         <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
-          精选 13 部高分佳作，每一部都值得反复品味。在光影之间，感受故事的无穷魅力。
+          精选 100 部高分佳作，综合 IMDb/豆瓣/Letterboxd/烂番茄四大榜单
         </p>
+
+        <!-- 数据统计面板 -->
+        <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-8" id="stats-panel">
+          <div class="flex flex-col items-center px-6 py-3 bg-white/5 rounded-xl border border-white/10 min-w-[100px]">
+            <span id="stat-count" class="text-2xl md:text-3xl font-bold text-amber-400">100</span>
+            <span class="text-xs text-gray-400 mt-1">精选电影</span>
+          </div>
+          <div class="flex flex-col items-center px-6 py-3 bg-white/5 rounded-xl border border-white/10 min-w-[100px]">
+            <span id="stat-genres" class="text-2xl md:text-3xl font-bold text-sky-400">20</span>
+            <span class="text-xs text-gray-400 mt-1">类型覆盖</span>
+          </div>
+          <div class="flex flex-col items-center px-6 py-3 bg-white/5 rounded-xl border border-white/10 min-w-[100px]">
+            <span id="stat-avg-rating" class="text-2xl md:text-3xl font-bold text-emerald-400">8.5</span>
+            <span class="text-xs text-gray-400 mt-1">平均评分</span>
+          </div>
+          <div class="flex flex-col items-center px-6 py-3 bg-white/5 rounded-xl border border-white/10 min-w-[100px]">
+            <span id="stat-year-range" class="text-2xl md:text-3xl font-bold text-purple-400">1931-2025</span>
+            <span class="text-xs text-gray-400 mt-1">年代跨度</span>
+          </div>
+        </div>
 
         <!-- 分类筛选区 -->
         <div class="max-w-4xl mx-auto" id="filter-section">
@@ -175,6 +216,172 @@
             >
               历史
             </button>
+            <button
+              type="button"
+              data-category="冒险"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              冒险
+            </button>
+            <button
+              type="button"
+              data-category="惊悚"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              惊悚
+            </button>
+            <button
+              type="button"
+              data-category="犯罪"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              犯罪
+            </button>
+            <button
+              type="button"
+              data-category="奇幻"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              奇幻
+            </button>
+            <button
+              type="button"
+              data-category="动作"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              动作
+            </button>
+            <button
+              type="button"
+              data-category="家庭"
+              class="category-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              家庭
+            </button>
+          </div>
+
+          <!-- 排序选择器 -->
+          <div class="flex items-center justify-center gap-3 mt-6" id="sort-controls">
+            <label for="sort-select" class="text-sm text-gray-400">排序方式</label>
+            <select
+              id="sort-select"
+              class="px-4 py-2 bg-white/10 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400/50 backdrop-blur-sm transition-all appearance-none cursor-pointer"
+              aria-label="排序方式"
+            >
+              <option value="rank" class="bg-gray-800 text-white">排名</option>
+              <option value="rating" class="bg-gray-800 text-white">评分</option>
+              <option value="year" class="bg-gray-800 text-white">年份</option>
+              <option value="title" class="bg-gray-800 text-white">片名</option>
+            </select>
+            <button
+              type="button"
+              id="sort-order-btn"
+              class="px-4 py-2 bg-white/10 border border-gray-600 rounded-lg text-white text-sm hover:bg-white/20 transition-all focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+              aria-label="切换排序方向"
+              title="点击切换升序/降序"
+            >
+              <span id="sort-order-icon">&darr;</span> <span id="sort-order-label">降序</span>
+            </button>
+          </div>
+
+          <!-- 年份区间筛选 -->
+          <div class="mt-6" id="year-range-filter">
+            <div class="flex items-center justify-center gap-4">
+              <span class="text-sm text-gray-400">年份区间</span>
+              <input
+                type="range"
+                id="year-range-min"
+                class="year-range-slider"
+                min="2000"
+                max="2025"
+                value="2000"
+                aria-label="最小年份"
+              >
+              <input
+                type="range"
+                id="year-range-max"
+                class="year-range-slider"
+                min="2000"
+                max="2025"
+                value="2025"
+                aria-label="最大年份"
+              >
+            </div>
+            <p id="year-range-label" class="text-center text-sm text-amber-400 mt-2">2000 - 2025</p>
+          </div>
+
+          <!-- 地区筛选按钮组 -->
+          <div class="flex flex-wrap justify-center gap-2 md:gap-3 mt-6" id="region-filters" role="group" aria-label="地区筛选">
+            <button
+              type="button"
+              data-region="all"
+              class="region-btn active px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-amber-500 text-gray-900 shadow-lg shadow-amber-500/25"
+            >
+              全部
+            </button>
+            <button
+              type="button"
+              data-region="美国"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              美国
+            </button>
+            <button
+              type="button"
+              data-region="英国"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              英国
+            </button>
+            <button
+              type="button"
+              data-region="日本"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              日本
+            </button>
+            <button
+              type="button"
+              data-region="韩国"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              韩国
+            </button>
+            <button
+              type="button"
+              data-region="中国"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              中国
+            </button>
+            <button
+              type="button"
+              data-region="法国"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              法国
+            </button>
+            <button
+              type="button"
+              data-region="印度"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              印度
+            </button>
+            <button
+              type="button"
+              data-region="德国"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              德国
+            </button>
+            <button
+              type="button"
+              data-region="其他"
+              class="region-btn px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/10 text-gray-300 hover:bg-white/20 border border-gray-600/50"
+            >
+              其他
+            </button>
           </div>
         </div>
       </div>
@@ -185,12 +392,51 @@
       <!-- 结果统计 -->
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl md:text-2xl font-bold text-gray-900">电影列表</h2>
-        <span id="result-count" class="text-sm text-gray-500">共 13 部</span>
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            id="export-btn"
+            class="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all flex items-center gap-1.5"
+            aria-label="导出清单"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            导出清单
+          </button>
+          <span id="result-count" class="text-sm text-gray-500">共 100 部</span>
+        </div>
       </div>
 
       <!-- 电影网格 -->
       <div id="movie-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
         <!-- 卡片由 JS 动态渲染 -->
+      </div>
+
+      <!-- 分页控件 -->
+      <div id="pagination-container" class="flex flex-col items-center mt-10 gap-4">
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            id="pagination-prev"
+            class="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="上一页"
+          >
+            上一页
+          </button>
+          <div id="pagination-pages" class="flex items-center gap-1">
+            <!-- 页码按钮由 JS 动态渲染 -->
+          </div>
+          <button
+            type="button"
+            id="pagination-next"
+            class="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="下一页"
+          >
+            下一页
+          </button>
+        </div>
+        <p id="pagination-info" class="text-sm text-gray-500">第 1 页 / 共 1 页</p>
       </div>
 
       <!-- 空状态提示 -->
@@ -343,18 +589,9 @@
 
           <p id="movie-modal-quote" class="movie-modal-quote"></p>
 
-          <a
-            id="movie-modal-detail-link"
-            href=""
-            target="_blank"
-            rel="noopener noreferrer"
-            class="movie-modal-detail-link"
-          >
-            去观看
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-            </svg>
-          </a>
+          <div id="movie-modal-watch-links" class="movie-modal-watch-links">
+            <!-- 多个观看链接由 JS 动态渲染 -->
+          </div>
         </div>
       </div>
     </div>
@@ -410,6 +647,8 @@
   </div>
 
   <!-- 主逻辑脚本 -->
+  <script src="js/data.js"></script>
+  <script src="js/watch_urls.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
