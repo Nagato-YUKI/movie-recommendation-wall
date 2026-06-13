@@ -1049,6 +1049,7 @@ html {
   --color-bg-primary: #0f172a;
   --color-bg-secondary: #1e293b;
   --color-bg-tertiary: #334155;
+  --color-bg-page: #0f172a;
   --color-text-primary: #f1f5f9;
   --color-text-secondary: #cbd5e1;
   --color-text-muted: #94a3b8;
@@ -1073,6 +1074,12 @@ html {
   --color-hero-bg-start: #0f172a;
   --color-hero-bg-end: #1e293b;
   --color-search-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== 暗色主题默认样式（覆盖 Tailwind 的 bg-gray-50 / text-gray-800） ===== */
+html body {
+  background-color: var(--color-bg-page) !important;
+  color: var(--color-text-primary) !important;
 }
 
 /* ============================================
@@ -1643,6 +1650,7 @@ html {
   --color-bg-primary: #f8fafc;
   --color-bg-secondary: #ffffff;
   --color-bg-tertiary: #f1f5f9;
+  --color-bg-page: #f8fafc;
   --color-text-primary: #1e293b;
   --color-text-secondary: #475569;
   --color-text-muted: #64748b;
@@ -1660,146 +1668,316 @@ html {
   --color-btn-default-border: #cbd5e1;
   --color-btn-default-hover-bg: #f1f5f9;
   --color-stats-label: #64748b;
-  --color-nav-bg: rgba(255, 255, 255, 0.9);
+  --color-nav-bg: rgba(255, 255, 255, 0.95);
   --color-nav-border: #e2e8f0;
   --color-hero-bg-start: #f1f5f9;
   --color-hero-bg-end: #e2e8f0;
   --color-search-bg: rgba(0, 0, 0, 0.05);
 }
 
-/* Body 全局 */
+/* ===== 亮色主题 — Body & 全局 ===== */
 [data-theme="light"] body {
   background-color: #f8fafc;
   color: #1e293b;
 }
 
-/* 导航栏 */
-[data-theme="light"] nav {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-bottom-color: #e2e8f0;
+/* ===== 亮色主题 — 导航栏 ===== */
+[data-theme="light"] #navbar {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom-color: #e2e8f0 !important;
+  backdrop-filter: blur(12px);
+}
+[data-theme="light"] #navbar .text-white {
+  color: #1e293b !important;
+}
+[data-theme="light"] #navbar .text-gray-300 {
+  color: #475569 !important;
+}
+[data-theme="light"] #navbar .text-gray-300:hover {
+  color: #f59e0b !important;
+}
+[data-theme="light"] #navbar .hover\:text-white:hover {
+  color: #f59e0b !important;
+}
+[data-theme="light"] #navbar .hover\:bg-gray-800:hover {
+  background-color: #f1f5f9 !important;
+}
+[data-theme="light"] #mobile-menu {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-top-color: #e2e8f0 !important;
 }
 
-/* Hero 区域背景 */
-[data-theme="light"] #hero {
-  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+/* ===== 亮色主题 — Hero 区域 ===== */
+[data-theme="light"] section[class*="from-slate-900"] {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%) !important;
+}
+[data-theme="light"] section[class*="from-slate-900"] h1 {
+  color: #1e293b;
+}
+[data-theme="light"] section[class*="from-slate-900"] .text-gray-400 {
+  color: #64748b !important;
+}
+/* Hero 区域统计卡片 */
+[data-theme="light"] section[class*="from-slate-900"] .bg-white\/5 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+[data-theme="light"] section[class*="from-slate-900"] .border-white\/10 {
+  border-color: #e2e8f0 !important;
+}
+[data-theme="light"] section[class*="from-slate-900"] .text-gray-400.mt-1 {
+  color: #64748b !important;
 }
 
-/* 电影卡片 */
+/* ===== 亮色主题 — 搜索框 ===== */
+[data-theme="light"] #search-input {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] #search-input::placeholder {
+  color: #94a3b8 !important;
+}
+[data-theme="light"] #search-input:focus {
+  background-color: #ffffff !important;
+  border-color: #f59e0b !important;
+}
+
+/* ===== 亮色主题 — 分类标签 & 地区按钮 ===== */
+[data-theme="light"] .category-btn:not(.active),
+[data-theme="light"] .region-btn:not(.active) {
+  background-color: #ffffff !important;
+  color: #475569 !important;
+  border-color: #cbd5e1 !important;
+}
+[data-theme="light"] .category-btn:not(.active):hover,
+[data-theme="light"] .region-btn:not(.active):hover {
+  background-color: #f1f5f9 !important;
+  border-color: #f59e0b !important;
+  color: #f59e0b !important;
+}
+[data-theme="light"] .category-btn.active,
+[data-theme="light"] .region-btn.active {
+  background-color: #f59e0b !important;
+  color: #1f2937 !important;
+  border-color: #f59e0b !important;
+}
+
+/* ===== 亮色主题 — 排序控件 ===== */
+[data-theme="light"] #sort-controls .text-gray-400 {
+  color: #64748b !important;
+}
+[data-theme="light"] #sort-select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] #sort-select option {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] #sort-order-btn {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] #sort-order-btn:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* ===== 亮色主题 — 年份区间 ===== */
+[data-theme="light"] #year-range-filter .text-gray-400 {
+  color: #64748b !important;
+}
+[data-theme="light"] #year-range-label {
+  color: #d97706 !important;
+}
+
+/* ===== 亮色主题 — 电影列表区域 ===== */
+[data-theme="light"] #movie-section h2 {
+  color: #1e293b !important;
+}
+[data-theme="light"] #result-count {
+  color: #64748b !important;
+}
+[data-theme="light"] #export-btn {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+[data-theme="light"] #export-btn:hover {
+  background-color: #334155 !important;
+}
+
+/* ===== 亮色主题 — 分页控件 ===== */
+[data-theme="light"] #pagination-prev,
+[data-theme="light"] #pagination-next {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+[data-theme="light"] #pagination-prev:hover:not(:disabled),
+[data-theme="light"] #pagination-next:hover:not(:disabled) {
+  background-color: #334155 !important;
+}
+[data-theme="light"] #pagination-info {
+  color: #64748b !important;
+}
+/* JS 动态生成的分页页码按钮 */
+[data-theme="light"] .pagination-page-btn {
+  background-color: #ffffff !important;
+  color: #475569 !important;
+}
+[data-theme="light"] .pagination-page-btn:hover {
+  background-color: #f1f5f9 !important;
+}
+[data-theme="light"] .pagination-page-btn.\\!bg-amber-500 {
+  background-color: #f59e0b !important;
+  color: #1f2937 !important;
+}
+
+/* ===== 亮色主题 — 空状态 ===== */
+[data-theme="light"] #empty-state .text-gray-300 {
+  color: #cbd5e1 !important;
+}
+[data-theme="light"] #empty-state .text-gray-500 {
+  color: #64748b !important;
+}
+[data-theme="light"] #empty-state .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+/* ===== 亮色主题 — 电影卡片 ===== */
 [data-theme="light"] .movie-card-inner {
-  background-color: #ffffff;
-  border-color: #e2e8f0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
 }
-
 [data-theme="light"] .movie-card:hover .movie-card-inner {
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
 }
-
 [data-theme="light"] .movie-image-wrapper {
-  background-color: #f1f5f9;
+  background-color: #f1f5f9 !important;
+}
+/* 卡片内文字颜色（javascript 动态渲染的 inline style 会覆盖，这里做后备） */
+
+/* ===== 亮色主题 — 电影详情弹窗 ===== */
+[data-theme="light"] #movie-modal-content {
+  background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%) !important;
+}
+[data-theme="light"] .movie-modal-close {
+  color: #64748b !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+[data-theme="light"] .movie-modal-close:hover {
+  color: #111827 !important;
+}
+[data-theme="light"] .movie-modal-title {
+  color: #111827 !important;
+}
+[data-theme="light"] .movie-modal-original-title {
+  color: #6b7280 !important;
+}
+[data-theme="light"] .movie-modal-description {
+  color: #4b5563 !important;
+}
+[data-theme="light"] .movie-modal-meta-value {
+  color: #374151 !important;
+}
+[data-theme="light"] .movie-modal-meta-label {
+  color: #9ca3af !important;
 }
 
-/* 留言板 */
+/* ===== 亮色主题 — 留言板 ===== */
 [data-theme="light"] #message-board {
-  background-color: #f1f5f9;
-  color: #1e293b;
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
 }
-
 [data-theme="light"] #message-board h2 {
-  color: #1e293b;
+  color: #1e293b !important;
 }
-
 [data-theme="light"] .message-form {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  backdrop-filter: none;
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  backdrop-filter: none !important;
 }
-
 [data-theme="light"] .message-input,
 [data-theme="light"] .message-textarea {
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  color: #1e293b;
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #1e293b !important;
 }
-
 [data-theme="light"] .message-input::placeholder,
 [data-theme="light"] .message-textarea::placeholder {
-  color: #94a3b8;
+  color: #94a3b8 !important;
 }
-
 [data-theme="light"] .message-input:focus,
 [data-theme="light"] .message-textarea:focus {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-  background-color: #ffffff;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2) !important;
+  background-color: #ffffff !important;
 }
-
 [data-theme="light"] .message-item {
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  backdrop-filter: none;
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  backdrop-filter: none !important;
 }
-
 [data-theme="light"] .message-item:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  border-color: #cbd5e1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+  border-color: #cbd5e1 !important;
 }
-
 [data-theme="light"] .message-nickname {
-  color: #d97706;
+  color: #d97706 !important;
 }
-
 [data-theme="light"] .message-time {
-  color: #94a3b8;
+  color: #94a3b8 !important;
 }
-
 [data-theme="light"] .message-content {
-  color: #475569;
+  color: #475569 !important;
+}
+[data-theme="light"] .message-submit-btn {
+  background-color: #f59e0b !important;
+  color: #0f172a !important;
 }
 
-/* 搜索框 */
-[data-theme="light"] #search-input {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: #1e293b;
-  border-color: #cbd5e1;
+/* ===== 亮色主题 — 页脚 ===== */
+[data-theme="light"] #footer {
+  background-color: #f1f5f9 !important;
+  color: #64748b !important;
+}
+[data-theme="light"] #footer .text-gray-400 {
+  color: #64748b !important;
+}
+[data-theme="light"] #footer .text-gray-500 {
+  color: #94a3b8 !important;
+}
+[data-theme="light"] #footer .hover\:text-gray-300:hover {
+  color: #1e293b !important;
 }
 
-[data-theme="light"] #search-input:focus {
-  background-color: rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="light"] #search-input::placeholder {
-  color: #94a3b8;
-}
-
-/* 评分徽章 light 覆盖 */
-[data-theme="light"] .rating-badge {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-
-/* 分类标签在亮色主题下保持原有配色（浅色背景 + 深色文字） */
-/* 不做额外覆盖，因为原有的 tag-* 样式本身就是亮色风格 */
-
-/* 回到顶部按钮亮色适配 */
+/* ===== 亮色主题 — 回到顶部按钮 ===== */
 [data-theme="light"] #back-to-top {
-  background-color: #ffffff;
-  color: #475569;
-  border-color: #cbd5e1;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff !important;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1) !important;
 }
-
 [data-theme="light"] #back-to-top:hover {
-  background-color: #f1f5f9;
-  color: #f59e0b;
+  background-color: #f1f5f9 !important;
+  color: #f59e0b !important;
 }
 
-/* Toast 通知亮色适配 */
+/* ===== 亮色主题 — Toast 通知 ===== */
 [data-theme="light"] .toast-notification {
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #1e293b;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background-color: rgba(30, 41, 59, 0.95) !important;
+  color: #ffffff !important;
 }
+
+/* ===== 亮色主题 — 统计数字颜色（保持不变，本色） ===== */
+/* amber/sky/emerald/purple 统计数字在两种主题下都保持原色 */
+[data-theme="light"] .stats-label {
+  color: #64748b !important;
+}
+
+/* ===== 亮色主题 — 分类标签在亮色主题下保持原有配色 ===== */
+/* 原有的 tag-* 样式本身就是浅色背景+深色文字，无需额外覆盖 */
 
 /* ============================================
    8. 导出按钮样式
